@@ -83,7 +83,7 @@ function FoodDetailScreen(props) {
 
   return (
     <Container style={globalStyles.scrollView}>
-    <StatusBar style="light" hidden="false" />
+    <StatusBar style="light" hidden={false} />
       <SharedElement id={`item.${dish.id}.image_url`}>
         <CachedImage style={styles.image} source={{ uri: dish.picture }} resizeMode="cover" />
       </SharedElement>

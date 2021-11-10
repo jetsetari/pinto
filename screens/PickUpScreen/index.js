@@ -80,7 +80,7 @@ function PickUpScreen(props) {
 
   return (
     <HeaderContainer title="Pick up food">
-       <StatusBar style="light" hidden="false" />
+       <StatusBar style="light" hidden={false} />
               {wrongQrCode !== "" && (
           <View style={styles.wrongQrCode}>
             <Ionicons name="warning-outline" size={82} color={"#FFAA0D"} />

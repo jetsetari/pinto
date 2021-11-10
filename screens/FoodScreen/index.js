@@ -114,7 +114,7 @@ function FoodScreen({ navigation, company }) {
 
   return (
     <ScrollHeaderContainer title="Meals" refreshEnabled={true} onRefresh={() => onRefresh()} refreshing={refreshing}>
-    <StatusBar style="light" hidden="false" />
+    <StatusBar style="light" hidden={false} />
       {dishes ? (
         <Tabs renderTabBar={() => <ScrollableTab style={styles.ScrollableTab} tabsContainerStyle={styles.tabsContainerStyle} />} style={styles.TabBarStyle} underlineStyle={styles.underlineStyle} tabBarUnderlineStyle={styles.tabBarUnderlineStyle} tabContainerStyle={styles.tabContainerStyle} onChangeTab={({ i }) => setCurrentTab(i)}>
           {dishes.map((item, idx) => (

@@ -34,7 +34,7 @@ function OrdersScreen(props) {
 
   return (
     <ScrollHeaderContainer title="Orders" backButton="Account" navigation={props.navigation} refreshEnabled={true} onRefresh={() => onRefresh()} refreshing={refreshing}>
-       <StatusBar style="light" hidden="false" />
+       <StatusBar style="light" hidden={false} />
       <View style={globalStyles.e_layout}>
       <OrderedFood dishes={loading ? "loading" : orders} />
       </View>

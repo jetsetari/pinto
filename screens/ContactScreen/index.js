@@ -14,7 +14,7 @@ import { Ionicons } from "@expo/vector-icons";
 function ContactScreen({ navigation }) {
   return (
     <ScrollHeaderContainer title="Contact" backButton="Account" navigation={navigation}>
-      <StatusBar style="light" hidden="false" />
+      <StatusBar style="light" hidden={false} />
 
       <View style={{ ...globalStyles.e_layout, marginTop: 0 }}>
         <H1 style={styles.HeadingText}>Pinto New Gen</H1>

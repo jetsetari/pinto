@@ -94,7 +94,7 @@ function ScrollHeaderContainer(props) {
 
   return (
     <Container style={{ ...styles.scrollView, paddingTop: insets.top }}>
-      <StatusBar style="light" hidden="false" />
+      <StatusBar style="light" hidden={false} />
       <Animated.Image
         source={require("../../assets/images/logo.png")}
         style={[

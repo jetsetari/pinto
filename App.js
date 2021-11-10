@@ -50,7 +50,7 @@ function App(props) {
 
   return fontsLoaded ? (
     <>
-          <StatusBar style="light" hidden="false" />
+          <StatusBar style="light" hidden={false} />
       {authUser !== null ? <Navigation authUser={authUser} /> : <Loading />}
     </>
   ) : <Loading/>;

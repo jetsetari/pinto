@@ -41,7 +41,7 @@ function MachineDetail(props) {
 
   return (
     <Container style={globalStyles.scrollView}>
-<StatusBar style="light" hidden="false" />
+<StatusBar style="light" hidden={false} />
       <SharedElement id={`item.${props.route.params.machine.id}.image_url`}>
         <CachedImage style={styles.image} source={{ uri: props.route.params.machine.picture }} resizeMode="cover" />
         {/* <FastImage  source={{uri: props.route.params.machine.picture,  priority: FastImage.priority.high}} style={styles.image} resizeMode={FastImage.resizeMode.cover}></FastImage> */}

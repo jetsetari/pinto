@@ -53,7 +53,7 @@ function ForgotPWScreen({ route, navigation }) {
 
   return (
     <ScrollHeaderContainer navigation={navigation} backButton={route.params.previous_screen} title="Forgot Password">
-<StatusBar style="light" hidden="false" />
+<StatusBar style="light" hidden={false} />
           {success ? (
             <View style={[styles.e_layout, globalStyles.containerLogo]}>
               <Text style={styles.pwreset}>Check your email to reset your password: {email}</Text>

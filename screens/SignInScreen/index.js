@@ -47,7 +47,7 @@ function SignInScreen({ navigation }) {
 
   return (
     <ScrollHeaderContainer title="Sign In">
-      <StatusBar style="light" hidden="false" />
+      <StatusBar style="light" hidden={false} />
       <View style={[styles.e_layout, globalStyles.containerLogo ]}>
         <TextInput autoCapitalize="none" keyboardType="email-address" autoCompleteType="email" style={globalStyles.inputText} placeholder="Email" placeholderTextColor="#B1B1B1" returnKeyType="next" keyboardType="email-address" textContentType="emailAddress" value={email} onChangeText={(email) => setEmail(email)} />
         <TextInput autoCapitalize="none" autoCompleteType="password" style={globalStyles.inputText} placeholder="Password" placeholderTextColor="#B1B1B1" returnKeyType="done" textContentType="newPassword" secureTextEntry={true} value={password} onChangeText={(password) => setPassword(password)} />

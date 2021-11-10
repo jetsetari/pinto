@@ -59,7 +59,7 @@ function SignUpScreen(props) {
 
   return (
     <ScrollHeaderContainer navigation={props.navigation} backButton={props.route.params.previous_screen} title="Sign Up"  >
-       <StatusBar style="light" hidden="false" />
+       <StatusBar style="light" hidden={false} />
           <View style={[styles.e_layout, globalStyles.containerLogo]}>
             <TextInput autoCapitalize="words" autoCompleteType="name" style={globalStyles.inputText} placeholder="First name" placeholderTextColor="#B1B1B1" returnKeyType="next" textContentType="name" value={firstName} onChangeText={(firstName) => setFirstName(firstName)} />
             <TextInput autoCapitalize="words" autoCompleteType="name" style={globalStyles.inputText} placeholder="Last name" placeholderTextColor="#B1B1B1" returnKeyType="next" textContentType="name" value={lastName} onChangeText={(lastName) => setLastName(lastName)} />
