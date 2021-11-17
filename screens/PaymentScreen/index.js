@@ -55,11 +55,12 @@ function PaymentScreen(props) {
     </style>
   </head>
 
-  <form id="checkoutForm">
-    <!-- <form id="checkoutForm" method="POST" action="https://us-central1-pinto-new-gen.cloudfunctions.net/handlePaymentOmise"> -->
+  <!--<form id="checkoutForm">-->
+  <form id="checkoutForm" method="POST" action="https://us-central1-pinto-new-gen.cloudfunctions.net/handlePaymentOmisePinto">
     <input type="hidden" name="omiseToken" />
     <input type="hidden" name="omiseSource" />
-    <input type="hidden" name="amount" value="12345" />
+    <input type="hidden" name="amount" value="${props.route.params.price * 100}" />
+    <input type="hidden" name="return_uri" />
     <input type="hidden" name="currency" value="THB" />
   </form>
 
@@ -100,7 +101,6 @@ function PaymentScreen(props) {
         form.submit();
       },
       onFormClosed: () => {
-        
         window.location.href = 'close';
       },
     });
@@ -123,25 +123,26 @@ function PaymentScreen(props) {
   }
 
   function handlePayment(e) {
-    
-    if (e.data.status === "success") {
+    alert('test');
+    //TERUG UNCOMMENTEN !!!
+    //if (e.data.status === "success") {
       //handle payed in firestore
       addEmployeesOrder(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, props.route.params.dish, props.route.params.aisle, props.route.params.date, props.route.params.machine[props.route.params.machine_index].name, props.route.params.machine[props.route.params.machine_index].machine_id, props.route.params.machine[props.route.params.machine_index].id, () => {
         updateOrderPayment("success", props.company.selectedCompany.company_id, props.route.params.aisle, props.route.params.machine, formatDate(Date.parse(props.route.params.date)), props.route.params.dish, props.company.selectedCompany.user_id, props.route.params.machine_index, () => {
           deletePendingOrder(props.company.selectedCompany.user_id, () => {
-            setLoading(false);
             setPaymentSuccess(true);
+            setLoading(false);
           })
         });
       });
-    } else if (e.data.status === "failed") {
-      updateOrderPayment("failed", props.company.selectedCompany.company_id, props.route.params.aisle, props.route.params.machine, formatDate(Date.parse(props.route.params.date)), props.route.params.dish, props.company.selectedCompany.user_id, props.route.params.machine_index, () => {
-        deletePendingOrder(props.company.selectedCompany.user_id, () => {
-          setLoading(false);
-          setPaymentFailed(e.data.response);
-        })
-      });
-    }
+    // } else if (e.data.status === "failed") {
+    //   updateOrderPayment("failed", props.company.selectedCompany.company_id, props.route.params.aisle, props.route.params.machine, formatDate(Date.parse(props.route.params.date)), props.route.params.dish, props.company.selectedCompany.user_id, props.route.params.machine_index, () => {
+    //     deletePendingOrder(props.company.selectedCompany.user_id, () => {
+    //       setLoading(false);
+    //       setPaymentFailed(e.data.response);
+    //     })
+    //   });
+    // }
   }
 
   return (
@@ -187,7 +188,7 @@ function PaymentScreen(props) {
       ) : (
         <WebView
           onNavigationStateChange={(e) => {
-            if (e.navigationType && e.navigationType === "formsubmit") {
+            if (e.url && e.url !== "about:blank" && e.url.includes("omiseToken") && e.url.includes("currency") && e.url.includes("amount")) {
               let result = e.url.replace("about:blank?", "");
               let data = JSON.parse('{"' + decodeURI(result).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
               setLoading(true);

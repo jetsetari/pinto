@@ -31,7 +31,7 @@ function ContactScreen({ navigation }) {
           <Ionicons name="call-outline" size={22} color={"#ACC63C"} /> Contact
         </H2>
         <Text style={styles.description}>
-          0066855556556{"\n"}
+          0844566666{"\n"}
           info@pintonewgen.com
         </Text>
       </View>
