@@ -26,14 +26,14 @@ export const styles = StyleSheet.create({
     elevation: 0
   },
   e_layout_large_title: {
-    width: "86%",
+    width: '86%',
     maxWidth:450,
     flexDirection:"row",
     justifyContent: "flex-start",
     alignItems: "flex-start"
   },
   e_layout_small_title: {
-    width: "86%",
+    width: '86%',
     marginTop: 15,
     maxWidth:450,
     flexDirection:"row",

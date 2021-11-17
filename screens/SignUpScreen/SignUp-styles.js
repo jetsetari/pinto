@@ -8,7 +8,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "#006443",
   },
   e_layout: {
-    width: "86%",
+    width: '86%',
     marginTop: 0,
     maxWidth:450,
   },

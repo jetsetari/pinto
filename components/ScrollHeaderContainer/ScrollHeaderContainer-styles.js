@@ -63,7 +63,7 @@ backIcon: {
   top: 5
 },
   e_layout_large_title: {
-    width: "86%",
+    width: '86%',
     maxWidth:450,
     flexDirection:"row",
     justifyContent: "flex-start",

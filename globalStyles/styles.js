@@ -51,7 +51,7 @@ export const globalStyles = StyleSheet.create({
     color: "#ACC63C"
   },
   e_layout: {
-    width: "86%",
+    width: '86%',
     marginTop: 40,
     maxWidth:450,
   },
@@ -85,7 +85,7 @@ export const globalStyles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems:"center", 
     width:"100%",
-    width: "86%",
+    width: '86%',
     maxWidth:450,
   }
 });

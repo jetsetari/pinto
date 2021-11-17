@@ -24,7 +24,7 @@ export const styles = StyleSheet.create({
     padding:20,
     borderRadius:9,
     marginTop:20,
-    width: "86%",
+    width: '86%',
     maxWidth:450,
   },
   HeadingText:{

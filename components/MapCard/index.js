@@ -60,14 +60,14 @@ const Description = styled.View`
 const Title = styled.Text`
   font-size: 16px;
   font-weight: bold;
-  margin-top: 10px;
+  margin-top: 0px;
   margin-bottom: 0px;
   font-family: 'TitilliumBold';
   color: #000;
 `;
 
 const Subtitle = styled.Text`
-  font-size: 14px;
+  font-size: 10px;
   color: #000;
   font-family: 'TitilliumLight';
 `;

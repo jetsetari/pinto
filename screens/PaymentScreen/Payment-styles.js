@@ -2,7 +2,7 @@ import { StyleSheet, Dimensions } from "react-native";
 
 export const styles = StyleSheet.create({
   image: {
-    width: "86%",
+    width: '86%',
     maxWidth:450,
     height: 250,
     backgroundColor:"#006443",
@@ -44,14 +44,14 @@ export const styles = StyleSheet.create({
     padding:20,
     borderBottomLeftRadius: 9,
     borderBottomRightRadius: 9,
-    width: "86%",
+    width: '86%',
     maxWidth:450,
   },
   orderFailed:{
     backgroundColor: "#006443",
     padding:20,
     borderRadius:9,
-    width: "86%",
+    width: '86%',
     maxWidth:450,
   },
   CheckBox:{
