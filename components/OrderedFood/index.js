@@ -29,12 +29,22 @@ function OrderedFood({ dishes, onDetailNavigationPress, pickup, doPickUpDish }) 
         dishes.map((dish, idx) => (
           <ListItem key={idx} style={styles.listItem}>
             <TouchableOpacity style={styles.listItemTouch} onPress={() => onDetailNavigationPress(dish)}>
+
               <Image
                 style={styles.listImage}
                 source={{
                   uri: dish.picture,
                 }}
               />
+              {
+                dish.picked && 
+                <Image 
+                  style={styles.checkItem}
+                  source={
+                  require('../../assets/images/check.png')
+                }/>
+              }
+             
               <View style={styles.listItemTextContainer}>
               <H2 style={styles.listItemText}>{dish.title}</H2>
               <Text style={styles.listItemText}>Pickup date: {formatDate(dish.date.toDate())}</Text>

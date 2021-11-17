@@ -4,6 +4,13 @@ export const styles = StyleSheet.create({
   ListContainer:{
     paddingTop:30
   },  
+  checkItem:{
+    width: 30,
+    height: 30,
+    position: "absolute",
+    top: 20,
+    right: 20
+  },
   listItem: {
     width:"100%",
     marginTop:0,
