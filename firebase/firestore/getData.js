@@ -95,6 +95,52 @@ export const getMachines = (company_id, callback) => {
 	});
 };
 
+// export const getAllOrders = (date, callback) => {
+//   db.collection("companies").get().then(async (querySnapshot) => {
+//     await Promise.all(querySnapshot.docs.map(async (company_doc) => {
+//       let machines = await db.collection("companies").doc(company_doc.id).collection("dates").doc(date).collection("machines").get()
+//       let _machine = []
+//       machines.docs.map(doc => {
+//         doc.data().dishes.map(client => {
+//           let _push = {}
+//           _push.count = client.clients.length
+//           _push.dish = client.dish
+//           _push.dish_id = client.dish_id
+          
+//           _machine.push(_push)
+//         })
+//       })
+//       return _machine
+//     })).then((result) => {
+//       let _temp_array = []
+//       result.map((result) => {
+//         if(_temp_array.length > 0) {
+//           _temp_array = _temp_array.concat(result)
+//         }else{
+//           _temp_array = result
+//         }
+//       })
+
+//       let index;
+//       let newArray = [];
+//       _temp_array.map((aisle) => {
+//         index = newArray.findIndex((e) => e.dish_id === aisle.dish_id);
+//         if (index !== -1) {
+//           let _temp_clients_array = newArray[index].count;
+//           newArray[index].count = _temp_clients_array + aisle.count;
+//         } else {
+//           newArray.push({
+//             dish: aisle.dish,
+//             dish_id: aisle.dish_id,
+//             count: aisle.count,
+//           });
+//         }
+//       });
+//       callback(newArray)
+//     });
+//   });
+// };
+
 export function getEmployeeOrders(company_id, client_id, callback) {
     db.collection("companies")
       .doc(company_id)

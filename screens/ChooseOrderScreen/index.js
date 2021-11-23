@@ -10,12 +10,15 @@ import Loading from "../../components/Loading";
 import { globalStyles } from "../../globalStyles";
 import { styles } from "./Food-styles.js";
 import OrderedFood from "../../components/OrderedFood";
+import { createLog } from "../../firebase/firestore/saveData";
 
 function ChooseOrderScreen(props) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(false);
   const [succes, setSucces] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
+  const [date, setDate] = useState("");
+  const [dishes, setDishes] = useState("");
 
   useEffect(() => {
 
@@ -37,20 +40,38 @@ function ChooseOrderScreen(props) {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
+  const getDate = () => {
+    let today = new Date();
+    let dd = String(today.getDate()).padStart(2, '0');
+    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+    let yyyy = today.getFullYear();
+
+    setDate(mm + '/' + dd + '/' + yyyy);
+  }
+
+  const changeMachine = () => {
+    getAllOrderers(date, (e) => {
+      setDishes(e)
+      console.log(dishes);
+    });
+  }
+
   const doPickUpDish = (dish) => {
     setLoading(true);
     pickUpDish(props.company.selectedCompany.company_id, dish.machine_docId, dish.dish_aisle, (result) => {
       
       if (result) {
-        
-        updateOrderPicked(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, dish.id, () => {
+        getDate();
+        createLog(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, dish.id, dish.dish_aisle, date, props.route.params.data[0].machine_docId, () => {
           setLoading(false);
           setSucces(true);
           setTimeout(() => {
             setSucces(false);
             props.navigation.goBack();
           }, 5000);
-        })
+        });
+
+        // updateOrderPicked(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, dish.id, date, props.route.params.data[0].machine_docId, newDishesMachine, )
       } else {
         setLoading(false);
       }

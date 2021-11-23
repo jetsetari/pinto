@@ -79,6 +79,24 @@ export function addDateDoc(company_id, date, callback) {
   });
 }
 
+export function createLog(companyId, userId, dishId, dishAisle, date, machine, callback) {
+  db.collection("companies")
+  .doc(companyId)
+  .collection("logs")
+  .doc()
+  .set({
+    date: date,
+    userId: userId,
+    dishId: dishId,
+    dishAisle: dishAisle,
+    picked: true,
+    machine: machine
+  })
+  .then(function () {
+    callback()
+  });
+}
+
 export function addOrderesDishToAisle(individual_mode, type, company_id, machine_id, date, dish, client_id, machine_index, callback) {
   var docRef = db.collection("companies").doc(company_id).collection("dates").doc(date).collection("machines").doc(machine_id[machine_index].id);
   docRef.get().then(function (doc) {

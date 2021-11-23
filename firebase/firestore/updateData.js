@@ -43,7 +43,23 @@ export function updateOrderPicked(company_id, client_id, order_id, callback) {
   .update({
     picked: true
   })
-  .then(function () {
+  .then(function(e){
+    callback(e)
+  })
+  .catch(function (error) {
+    callback(false)
+  });
+}
+
+export function changePickedStatus(date, machine, newDishesMachine, callback) {
+  db.collection("companies")
+  .doc(company_id)
+  .collection("dates")
+  .doc(date)
+  .collection("machines")
+  .doc(machine)
+  .update(newDishesMachine)
+  .then(function(){
     callback(true)
   })
   .catch(function (error) {
