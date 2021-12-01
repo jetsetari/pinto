@@ -12,66 +12,59 @@ import ScrollHeaderContainer from "../../components/ScrollHeaderContainer";
 //Redux
 import { connect } from "react-redux";
 import { Ionicons } from "@expo/vector-icons";
-import TagScreen from "./TagScreen";
 
-function HelpScreen({ navigation, company, ...props }) {
-  const [questions, setquestions] = useState([]);
-  const [tags, setTags] = useState([]);
+function TagScreen({ tag, questions, navigation, company, ...props }) {
   const [showQuestions, setShowQuestions] = useState(false);
-
   useEffect(() => {
-    if(company?.selectedCompany?.company_holder_id){
-      getHelp(company.selectedCompany.company_holder_id, (data) => {
-        setquestions(data);
-        getTags(data);
-      });
-    }
+    getLinks();
 
+  }, [tag]);
 
-  }, []);
+  function _nav(item) {
+    let { created, ...rest } = item;
+    // navigation.push(
+    //   "Help",
+    //   { item: rest },
+    //   NavigationActions.navigate({ routeName: "HelpDetail" })
+    // );
 
-  function getTags(data) {
-    let _tags = []
-    data.forEach(question => {
-      if(question.tags){
-        question.tags.forEach(tag => {
-          _tags.indexOf(tag) === -1 &&  _tags.push(tag);
-        })}
-      });
-    setTags(_tags);
+    navigation.push("HelpDetail",{ item: item } )
   }
 
-
+  function getLinks() {
+    setShowQuestions(questions?.filter(question =>{
+      return question?.tags?.some(questionTag => questionTag === tag)
+    }))
+  }
 
   return (
-    <ScrollHeaderContainer title={showQuestions === false ? "Help" : showQuestions[1]} backButton={() => showQuestions === false ? setShowQuestions(false) : {}} navigation={navigation}>
-      <StatusBar hidden={false} style="light" />
       <Content>
-        {showQuestions === false ? (
+
           <View style={globalStyles.e_layout_container}>
             <View style={globalStyles.e_layout}>
-              {tags &&
-                tags.map((tag, idx) => (
+              {showQuestions ? (
+                showQuestions.map((question, idx) => (
                   <TouchableOpacity
                     key={idx}
                     style={styles.accountlistitemFirst}
                     onPress={() => {
-                      setShowQuestions([true, tag]);
+                      _nav(question);
                     }}
                   >
                     <View style={(globalStyles.e_layout, globalStyles.accountlistitem_content)}>
-                      <Text style={globalStyles.mainButtonText}>{tag}</Text>
+                      <Text style={globalStyles.mainButtonText}>{question.name}</Text>
                       <Ionicons name="arrow-forward" size={22} color={"#ffffff"} />
                     </View>
                   </TouchableOpacity>
-                ))}
+                ))                    
+              ):(
+                <View style={(globalStyles.e_layout, globalStyles.accountlistitem_content)}>
+                  <Text style={globalStyles.mainButtonText}>No items in this section</Text>
+                </View>
+              )}
             </View>
           </View>
-        ):(
-          <TagScreen tag={showQuestions[1]} navigation={navigation} questions={questions} />
-        )}
       </Content>
-    </ScrollHeaderContainer>
   );
 }
 
@@ -79,4 +72,4 @@ const mapStateToProps = (state) => ({
   company: state.selectedCompany
 });
 
-export default connect(mapStateToProps, null)(HelpScreen);
+export default connect(mapStateToProps, null)(TagScreen);

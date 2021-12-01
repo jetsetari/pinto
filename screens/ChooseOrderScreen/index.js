@@ -40,15 +40,6 @@ function ChooseOrderScreen(props) {
     wait(2000).then(() => setRefreshing(false));
   }, []);
 
-  const getDate = () => {
-    let today = new Date();
-    let dd = String(today.getDate()).padStart(2, '0');
-    let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
-    let yyyy = today.getFullYear();
-
-    setDate(mm + '/' + dd + '/' + yyyy);
-  }
-
   const changeMachine = () => {
     getAllOrderers(date, (e) => {
       setDishes(e)
@@ -61,8 +52,16 @@ function ChooseOrderScreen(props) {
     pickUpDish(props.company.selectedCompany.company_id, dish.machine_docId, dish.dish_aisle, (result) => {
       
       if (result) {
-        getDate();
-        createLog(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, dish.id, dish.dish_aisle, date, props.route.params.data[0].machine_docId, () => {
+        let today = new Date();
+        let dd = String(today.getDate()).padStart(2, '0');
+        let mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        let yyyy = today.getFullYear();
+    
+        setDate(mm + '- ' + dd + '-' + yyyy);
+
+        let logDate = mm + '-' + dd + '-' + yyyy
+
+        createLog(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, dish.id, dish.dish_aisle, logDate, props.route.params.data[0].machine_docId, () => {
           setLoading(false);
           setSucces(true);
           setTimeout(() => {

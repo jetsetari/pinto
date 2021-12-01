@@ -118,6 +118,7 @@ function FoodScreen({ navigation, company }) {
       {dishes ? (
         <Tabs renderTabBar={() => <ScrollableTab style={styles.ScrollableTab} tabsContainerStyle={styles.tabsContainerStyle} />} style={styles.TabBarStyle} underlineStyle={styles.underlineStyle} tabBarUnderlineStyle={styles.tabBarUnderlineStyle} tabContainerStyle={styles.tabContainerStyle} onChangeTab={({ i }) => setCurrentTab(i)}>
           {dishes.map((item, idx) => (
+           
             <Tab
               key={idx}
               heading={

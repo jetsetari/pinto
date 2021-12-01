@@ -14,6 +14,7 @@ import * as Haptics from 'expo-haptics';
 //import data
 import { rooms } from "./testData";
 import LocationSearch from "../../components/LocationSearch/index.js";
+import moment from "moment";
 
 const { width, height } = Dimensions.get("window");
 const CARD_WIDTH = width * 0.8;
@@ -184,7 +185,8 @@ function MachineMap(props) {
       }
       >
         {machines.map((machine, index) => (
-          <MapCard
+          (moment(Date.parse(`${moment(new Date()).format('DD MMM YYYY')} ${machine.openTime}`)).isBefore(new Date()) && moment(Date.parse(`${moment(new Date()).format('DD MMM YYYY')} ${machine.closeTime}`)).isAfter(new Date())) || moment(new Date(props.route.params.date)).isAfter(moment(new Date() ).add(1, 'days'))? (
+            <MapCard
             key={index}
             image={machine.picture}
             title={machine.name}
@@ -193,6 +195,16 @@ function MachineMap(props) {
             subtitle={machine.location.number + " " + machine.location.street + ", " + machine.location.postal_code + " " + machine.location.region}
             onPress={(e) => props.navigation.navigate("MachineDetail", {machine, dish: props.route.params.dish})}
           />
+          ):(
+            <MapCard
+            key={index}
+            image={machine.picture}
+            title={machine.name}
+            id={machine.id}
+            freePlaces="7 free aisles"
+            subtitle={'closed'}
+          />
+        )
         ))}
       </Animated.ScrollView>
     </Container>
