@@ -15,6 +15,7 @@ export const styles = StyleSheet.create({
     color:"#ffffff",
     fontSize:31,
     paddingLeft:0,
+
     fontFamily: "TitilliumBold",
   },
   header:{
@@ -78,6 +79,7 @@ backIcon: {
     justifyContent: "center",
     alignItems: "flex-start",
     top: -4,
+    marginBottom: 20
   },
   smallTitles:{
     backgroundColor: light_green,
@@ -103,6 +105,7 @@ backIcon: {
     fontSize: 18,
     marginTop: Platform.OS === "ios" ? 0 : 24,
     paddingTop:0,
+    marginBottom: 20
   },
   e_layout_container: {
     flex: 1,

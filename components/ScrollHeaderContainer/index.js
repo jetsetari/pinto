@@ -127,12 +127,11 @@ function ScrollHeaderContainer(props) {
         <>
           <Header style={styles.hidden_title}>
             <View style={styles.e_layout_small_title}>
-              <Button style={{ position: "absolute", left: 0, ...styles.backButton }} onPress={() => (props.backButton ? props.navigation.goBack() : {})}>
+              <Title style={styles.smallTitlesText}></Title>
+            </View>
+            <Button style={{ position: "absolute", left: 0, ...styles.backButton }} onPress={() => (props.backButton ? props.navigation.goBack() : {})}>
                 <Image style={props.backButton ? { width: 35, height: 35 } : styles.backButtonHidden} source={require("../../assets/images/back.png")} />
               </Button>
-              <Title style={styles.smallTitlesText}></Title>
-
-            </View>
           </Header>
         </>
       )}
@@ -156,9 +155,10 @@ function ScrollHeaderContainer(props) {
               <View style={styles.e_layout_large_title}>
                 {/* <Ionicons style={props.backButton ? styles.backIcon : styles.backButtonHidden} name="chevron-back" size={30} color="#ffffff" /> */}
                 <Title style={styles.headerText}>{props.title}</Title>
+                <Image style={{ width: width, height: 20}} source={require("../../assets/line.png")} />
               </View>
             </Header>
-            <Image style={{ width: width, height: 20 }} source={require("../../assets/line.png")} />
+
           </TouchableOpacity>
           <View style={styles.e_layout_container}>{props.children}</View>
         </SafeAreaView>

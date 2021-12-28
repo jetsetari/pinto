@@ -7,8 +7,10 @@ const Icon = ({name, color}) => {
   const icons = {
     Food: "home",
     "Pick Up": "maximize",
+    Wallet: "credit-card",
     Account: "user",
-    Shop:"shopping-bag"
+    Shop: "shopping-bag",
+    Notifications: "bell"
   };
 
   return (

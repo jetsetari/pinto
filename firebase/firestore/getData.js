@@ -25,6 +25,22 @@ export const getDateDishes = (date, callback) => {
 	});
 };
 
+export function getnotify(company_id, callback) {
+  db.collection("companies")
+    .doc(company_id)
+    .collection("notifications")
+    .orderBy("created")
+    .get()
+    .then(function (querySnapshot) {
+      if (querySnapshot.size <= 0) return callback(false);
+      callback(
+        querySnapshot.docs.map((doc) => {
+          return { ...doc.data(), id: doc.id };
+        })
+      );
+    });
+}
+
 export const getCompanies = (callback) => {
 	var docRef = db.collection("companies").where("company_holder", "==", "pinto");
 	docRef.get().then(function (querySnapshot) {
@@ -60,12 +76,31 @@ export const getUser = (uid, callback) => {
 	userRef.get().then(function (doc) {
         if(doc.exists){
             db.collection("companies").doc(doc.data().company_id).get().then(function (companyDoc) {
-                let data = {...doc.data(), ...companyDoc.data()}; data.user_id = doc.id;
-                callback(data);
-            })
+              if(companyDoc.exists){
+                db.collection("companies").doc(doc.data().company_id).collection('clients').doc(uid).get().then(function (walletDoc) {
+                  let data = {...doc.data(), ...companyDoc.data()}; data.user_id = doc.id; data.wallet = walletDoc.data().wallet;
+                  callback(data);
+                });
+              }});  
+            }})
+};
 
-        }
-	});
+export const getCartProducts = (uid, callback) => {
+	var userRef = db.collection("users").doc(uid);
+	userRef.get().then(function (doc) {
+        if(doc.exists){
+            db.collection("companies").doc(doc.data().company_id).get().then(function (companyDoc) {
+              if(companyDoc.exists){
+                db.collection("companies").doc(doc.data().company_id).collection('clients').doc(uid).collection("cart").get().then(function (querySnapshot) {
+                  let data = [];
+                  querySnapshot.forEach(function (cartDoc) {
+                    let _push = cartDoc.data(); _push.id = cartDoc.id;
+                    data.push(_push);
+                  });
+                  callback(data);
+                });
+              }});  
+            }})
 };
 
 export const getMachineDishesByDate = (company_id, machine_id, date, callback) => {

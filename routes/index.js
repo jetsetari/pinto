@@ -10,18 +10,21 @@ import AccountScreen from "../screens/AccountScreen";
 import SignInScreen from "../screens/SignInScreen";
 import SignUpScreen from "../screens/SignUpScreen";
 import ForgotPWScreen from "../screens/ForgotPWScreen";
+import WalletScreen from "../screens/WalletScreen";
 import OrdersScreen from "../screens/OrdersScreen";
 import FoodDetailScreen from "../screens/FoodDetailScreen";
 import PaymentScreen from "../screens/PaymentScreen";
 import MachineMapScreen from "../screens/MachineMapScreen";
 import MachineDetailScreen from "../screens/MachineDetailScreen";
 import CompanyScreen from "../screens/CompanyScreen";
+import NotificationsScreen from "../screens/NotificationsScreen";
 import TabBar from "../components/TabBar";
 
 import ContactScreen from "../screens/ContactScreen";
 import TermsScreen from "../screens/TermsScreen";
 import HelpScreen from "../screens/HelpScreen";
 import HelpDetailScreen from "../screens/HelpDetailScreen";
+import CartScreen from "../screens/CartScreen";
 
 const Tab = createMaterialTopTabNavigator();
 const Stack = createStackNavigator();
@@ -122,8 +125,11 @@ function TabNavigation() {
       }}
     >
       <Tab.Screen name="Food" component={HomeStackScreen} options={options} />
+      <Tab.Screen name="Wallet" component={WalletScreen} options={options} />
       <Tab.Screen name="Pick Up" component={PickUpStackScreen} options={options} />
+      <Tab.Screen name="Shop" component={CartScreen} options={options} />
       <Tab.Screen name="Account" component={SettingsStackScreen} options={options} />
+      <Tab.Screen name="Notifications" component={NotificationsScreen} options={options} />
     </Tab.Navigator>
   );
 }

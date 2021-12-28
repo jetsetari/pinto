@@ -399,3 +399,16 @@ export function addUserToCompany(company_id, client_id, data, callback) {
       callback()
     })
 }
+
+export function addProductToCart(company_id, client_id, data, callback) {
+  db.collection("companies")
+    .doc(company_id)
+    .collection("clients")
+    .doc(client_id)
+    .collection('cart')
+    .doc()
+    .set(data)
+    .then(function () {
+      callback()
+    })
+}

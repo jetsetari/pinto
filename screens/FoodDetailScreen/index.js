@@ -10,7 +10,7 @@ import * as Animatable from "react-native-animatable";
 import { Feather } from "@expo/vector-icons";
 //Redux
 import { connect } from "react-redux";
-import { addEmployeesOrder, addOrderesDishToAisle } from "../../firebase/firestore/saveData";
+import { addEmployeesOrder, addOrderesDishToAisle, addProductToCart } from "../../firebase/firestore/saveData";
 import CachedImage from "../../components/CachedImage";
 import { findPromo } from "../../firebase/firestore/getData";
 
@@ -67,6 +67,12 @@ function FoodDetailScreen(props) {
         }
       });
     }
+  }
+
+  function addToCart(product) {
+    addProductToCart(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, product, () => {
+
+    })
   }
 
   function getPromoCode() {
@@ -130,9 +136,12 @@ function FoodDetailScreen(props) {
                     <>
                       <View style={styles.priceWrap}>
                         <View style={{ flexDirection: "row" }}>
-                          <TextInput editable={!loading} textAlign={"center"} style={styles.promo} placeholder="Promo code" placeholderTextColor="#fff" returnKeyType="done" value={promo} onChangeText={(e) => setPromo(e)} />
+                          <TextInput editable={!loading} textAlign={"center"} style={styles.promo} placeholder="Promo code" placeholderTextColor="#A8A8A8" returnKeyType="done" value={promo} onChangeText={(e) => setPromo(e)} />
                           <TouchableOpacity style={{ ...styles.getPromo }} onPress={() => getPromoCode()}>
                             {promoLoading ? <ActivityIndicator size="small" color="#fff" /> : <Feather name="chevrons-right" size={22} color="#fff" />}
+                          </TouchableOpacity>
+                          <TouchableOpacity style={{ ...styles.toCart }} onPress={() => addToCart(dish)} >
+                            <Text style={{color: 'white', marginRight: 10}}>Add to cart</Text><Feather name="shopping-bag" size={22} color="#fff" />
                           </TouchableOpacity>
                         </View>
                       </View>
@@ -154,7 +163,7 @@ function FoodDetailScreen(props) {
                             ) : (
                               <>
                                 <ShoppingCar />
-                                <Text style={styles.buttonText}>Buy now</Text>
+                                <Text style={styles.buttonText}>Buy 1 now</Text>
                               </>
                             )}
                           </TouchableOpacity>

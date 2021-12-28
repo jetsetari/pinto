@@ -122,6 +122,18 @@ export const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
   },
+  toCart: {
+    backgroundColor: "#ACC63C",
+    height: 55,
+    borderRadius: 17,
+    alignSelf: "center",
+    width: 130,
+    marginTop:10,
+    marginLeft: 8 + '%',
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+  },
   promo: {
     width: 105,
     backgroundColor: "#018260",

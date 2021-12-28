@@ -7,7 +7,11 @@ export function deletePendingOrder(client_id,  callback) {
   })
 }
 
-
+export function deleteFromCart(company_id, client_id, product_id, callback) {
+  db.collection("companies").doc(company_id).collection('clients').doc(client_id).collection('cart').doc(product_id).delete().then(() => {
+    callback()
+  })
+}
 
 
 export function getpending() {

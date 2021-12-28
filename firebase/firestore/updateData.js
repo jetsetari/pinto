@@ -51,6 +51,22 @@ export function updateOrderPicked(company_id, client_id, order_id, callback) {
   });
 }
 
+export function updateWalletAmount(company_id, client_id, walletAmount, callback) {
+  db.collection("companies")
+  .doc(company_id)
+  .collection("clients")
+  .doc(client_id)
+  .update({
+    wallet: walletAmount
+  })
+  .then(function(e){
+    callback(e)
+  })
+  .catch(function (error) {
+    callback(false)
+  });
+}
+
 export function changePickedStatus(date, machine, newDishesMachine, callback) {
   db.collection("companies")
   .doc(company_id)
