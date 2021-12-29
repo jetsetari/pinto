@@ -400,14 +400,14 @@ export function addUserToCompany(company_id, client_id, data, callback) {
     })
 }
 
-export function addProductToCart(company_id, client_id, data, callback) {
+export function addProductToCart(company_id, client_id, data, date, callback) {
   db.collection("companies")
     .doc(company_id)
     .collection("clients")
     .doc(client_id)
     .collection('cart')
     .doc()
-    .set(data)
+    .set({...data, date: date})
     .then(function () {
       callback()
     })

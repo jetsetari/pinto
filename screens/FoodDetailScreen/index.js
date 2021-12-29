@@ -70,9 +70,7 @@ function FoodDetailScreen(props) {
   }
 
   function addToCart(product) {
-    addProductToCart(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, product, () => {
-
-    })
+    addProductToCart(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, product, formatDate(Date.parse(props.route.params.date)), () => {})
   }
 
   function getPromoCode() {

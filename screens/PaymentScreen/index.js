@@ -10,6 +10,7 @@ import { handlePaymentOmise } from "../../firebase/functions";
 import { updateOrderPayment } from "../../firebase/firestore/updateData";
 import { addEmployeesOrder } from "../../firebase/firestore/saveData";
 import { deletePendingOrder } from "../../firebase/firestore/deleteData";
+
 import Loading from "../../components/Loading";
 
 function PaymentScreen(props) {
@@ -18,7 +19,6 @@ function PaymentScreen(props) {
   const [paymentFailed, setPaymentFailed] = useState(false);
 
   useEffect(() => {
-    
   }, [])
 
   const html = `
@@ -93,6 +93,7 @@ function PaymentScreen(props) {
       currency: "THB",
       defaultPaymentMethod: "credit_card",
       onCreateTokenSuccess: (nonce) => {
+        console.log('JA');
         if (nonce.startsWith("tokn_")) {
           form.omiseToken.value = nonce;
         } else {
@@ -123,9 +124,9 @@ function PaymentScreen(props) {
   }
 
   function handlePayment(e) {
-    alert('test');
+    // alert('test');
     //TERUG UNCOMMENTEN !!!
-    //if (e.data.status === "success") {
+    if (e.data.status === "success") {
       //handle payed in firestore
       addEmployeesOrder(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, props.route.params.dish, props.route.params.aisle, props.route.params.date, props.route.params.machine[props.route.params.machine_index].name, props.route.params.machine[props.route.params.machine_index].machine_id, props.route.params.machine[props.route.params.machine_index].id, () => {
         updateOrderPayment("success", props.company.selectedCompany.company_id, props.route.params.aisle, props.route.params.machine, formatDate(Date.parse(props.route.params.date)), props.route.params.dish, props.company.selectedCompany.user_id, props.route.params.machine_index, () => {
@@ -135,14 +136,14 @@ function PaymentScreen(props) {
           })
         });
       });
-    // } else if (e.data.status === "failed") {
-    //   updateOrderPayment("failed", props.company.selectedCompany.company_id, props.route.params.aisle, props.route.params.machine, formatDate(Date.parse(props.route.params.date)), props.route.params.dish, props.company.selectedCompany.user_id, props.route.params.machine_index, () => {
-    //     deletePendingOrder(props.company.selectedCompany.user_id, () => {
-    //       setLoading(false);
-    //       setPaymentFailed(e.data.response);
-    //     })
-    //   });
-    // }
+    } else if (e.data.status === "failed") {
+      updateOrderPayment("failed", props.company.selectedCompany.company_id, props.route.params.aisle, props.route.params.machine, formatDate(Date.parse(props.route.params.date)), props.route.params.dish, props.company.selectedCompany.user_id, props.route.params.machine_index, () => {
+        deletePendingOrder(props.company.selectedCompany.user_id, () => {
+          setLoading(false);
+          setPaymentFailed(e.data.response);
+        })
+      });
+    }
   }
 
   return (
