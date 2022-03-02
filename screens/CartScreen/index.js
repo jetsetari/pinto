@@ -59,12 +59,10 @@ function CartScreen(props) {
     return [year, month, day].join("-");
   }
 
-  const chooseDish = (dish) => {
-    console.log(dish);
+  const chooseDishes = (dishes) => {
     if (props.company.selectedCompany.individual_mode) {
-      const {price, ...rest} = dish
-      rest.price = price - found_promo
-      props.navigation.navigate("Map", { dish: rest, date: dish.date });
+      // rest.price = price - found_promo
+      props.navigation.navigate("Map", { dishes: dishes });
     } else {
       setLoading(true);
       addOrderesDishToAisle(false, props.company.selectedCompany.type, props.company.selectedCompany.company_id, props.route.params.machine_id, formatDate(Date.parse(dish.date)), dish, props.company.selectedCompany.user_id, 0, (result, idx, machine_index) => {
@@ -91,11 +89,9 @@ function CartScreen(props) {
 
   
   const purchase = (products) => {
-    products.forEach(product => {
+    chooseDishes(products) 
 
-       chooseDish(product) 
 
-    })
     
   }
 

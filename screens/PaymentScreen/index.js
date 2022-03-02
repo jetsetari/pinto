@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import { handlePaymentOmise } from "../../firebase/functions";
 import { updateOrderPayment } from "../../firebase/firestore/updateData";
 import { addEmployeesOrder } from "../../firebase/firestore/saveData";
-import { deletePendingOrder } from "../../firebase/firestore/deleteData";
+import { deleteFromCart, deletePendingOrder } from "../../firebase/firestore/deleteData";
 
 import Loading from "../../components/Loading";
 
@@ -17,9 +17,21 @@ function PaymentScreen(props) {
   const [loading, setLoading] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentFailed, setPaymentFailed] = useState(false);
+  const [moneyCount, setMoneyCount] = useState(0);
 
   useEffect(() => {
-  }, [])
+    if (props.route.params.dishes !== undefined) {
+      let money = props.route.params.dishes.map(item => Number(item.price)).reduce((prev, next) => prev + next);
+     setMoneyCount(money);
+    }
+  }, [props.route.params.dishes])
+
+  const emptyCart = () => {
+    props.route.params.dishes.forEach((dish) =>{
+      deleteFromCart(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, dish.id, () => {})
+    })
+    
+  }
 
   const html = `
   <html lang="en">
@@ -55,11 +67,13 @@ function PaymentScreen(props) {
     </style>
   </head>
 
-  <!--<form id="checkoutForm">-->
-  <form id="checkoutForm" method="POST" action="https://us-central1-pinto-new-gen.cloudfunctions.net/handlePaymentOmisePinto">
+  <form id="checkoutForm">
+  <!--<form id="checkoutForm" method="POST" action="https://us-central1-pinto-new-gen.cloudfunctions.net/handlePaymentOmisePinto">--!>
     <input type="hidden" name="omiseToken" />
     <input type="hidden" name="omiseSource" />
-    <input type="hidden" name="amount" value="${props.route.params.price * 100}" />
+    <input type="hidden" name="amount" value="${props.route.params.dishes !== undefined ? (
+      moneyCount*100
+    ) : (props.route.params.dish.price*100)}" />
     <input type="hidden" name="return_uri" />
     <input type="hidden" name="currency" value="THB" />
   </form>
@@ -89,7 +103,9 @@ function PaymentScreen(props) {
     var form = document.querySelector("#checkoutForm");
 
     OmiseCard.open({
-      amount: ${props.route.params.dish.price*100},
+      amount: ${props.route.params.dishes !== undefined ? (
+        moneyCount*100
+      ) : (props.route.params.dish.price*100)},
       currency: "THB",
       defaultPaymentMethod: "credit_card",
       onCreateTokenSuccess: (nonce) => {
@@ -128,23 +144,50 @@ function PaymentScreen(props) {
     //TERUG UNCOMMENTEN !!!
     if (e.data.status === "success") {
       //handle payed in firestore
-      addEmployeesOrder(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, props.route.params.dish, props.route.params.aisle, props.route.params.date, props.route.params.machine[props.route.params.machine_index].name, props.route.params.machine[props.route.params.machine_index].machine_id, props.route.params.machine[props.route.params.machine_index].id, () => {
-        updateOrderPayment("success", props.company.selectedCompany.company_id, props.route.params.aisle, props.route.params.machine, formatDate(Date.parse(props.route.params.date)), props.route.params.dish, props.company.selectedCompany.user_id, props.route.params.machine_index, () => {
+      if (props.route.params.dish !== undefined) {
+        addEmployeesOrder(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, props.route.params.dish, props.route.params.aisle, props.route.params.date, props.route.params.machine[props.route.params.machine_index].name, props.route.params.machine[props.route.params.machine_index].machine_id, props.route.params.machine[props.route.params.machine_index].id, () => {
+          updateOrderPayment("success", props.company.selectedCompany.company_id, props.route.params.aisle, props.route.params.machine, formatDate(Date.parse(props.route.params.date)), props.route.params.dish, props.company.selectedCompany.user_id, props.route.params.machine_index, () => {
+            deletePendingOrder(props.company.selectedCompany.user_id, () => {
+              setPaymentSuccess(true);
+              emptyCart();
+              setLoading(false);
+            })
+          });
+        });
+      }else{
+        props.route.params.dishes.map((dish) => {
+          addEmployeesOrder(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, dish, props.route.params.aisle, props.route.params.date, props.route.params.machine[props.route.params.machine_index].name, props.route.params.machine[props.route.params.machine_index].machine_id, props.route.params.machine[props.route.params.machine_index].id, () => {
+            updateOrderPayment("success", props.company.selectedCompany.company_id, props.route.params.aisle, props.route.params.machine, formatDate(Date.parse(props.route.params.date)), dish, props.company.selectedCompany.user_id, props.route.params.machine_index, () => {
+              deletePendingOrder(props.company.selectedCompany.user_id, () => {
+                setPaymentSuccess(true);
+                emptyCart();
+                setLoading(false);
+              })
+            });
+          });
+        })
+      }
+      
+    } else if (e.data.status === "failed") {
+      if (props.route.params.dish !== undefined) {
+        updateOrderPayment("failed", props.company.selectedCompany.company_id, props.route.params.aisle, props.route.params.machine, formatDate(Date.parse(props.route.params.date)), props.route.params.dish, props.company.selectedCompany.user_id, props.route.params.machine_index, () => {
           deletePendingOrder(props.company.selectedCompany.user_id, () => {
-            setPaymentSuccess(true);
             setLoading(false);
+            setPaymentFailed(e.response);
           })
         });
-      });
-    } else if (e.data.status === "failed") {
-      updateOrderPayment("failed", props.company.selectedCompany.company_id, props.route.params.aisle, props.route.params.machine, formatDate(Date.parse(props.route.params.date)), props.route.params.dish, props.company.selectedCompany.user_id, props.route.params.machine_index, () => {
-        deletePendingOrder(props.company.selectedCompany.user_id, () => {
-          setLoading(false);
-          setPaymentFailed(e.data.response);
-        })
+      }else{
+        props.route.params.dishes.map((dish) => {
+          updateOrderPayment("failed", props.company.selectedCompany.company_id, props.route.params.aisle, props.route.params.machine, formatDate(Date.parse(props.route.params.date)), dish, props.company.selectedCompany.user_id, props.route.params.machine_index, () => {
+            deletePendingOrder(props.company.selectedCompany.user_id, () => {
+              setLoading(false);
+              setPaymentFailed(e.response);
+            })
+          });
       });
     }
   }
+}
 
   return (
     <>
@@ -154,21 +197,38 @@ function PaymentScreen(props) {
         <Container style={{backgroundColor: "#123835" }}>
           <Content >
             <View style={{ flex: 1, paddingTop: 20, paddingBottom: 60, alignItems: "center", }}>
-            <Image
-            style={(globalStyles.e_layout, styles.image)}
-            source={{
-              uri: props.route.params.dish.picture,
-            }}
-          />
+            {props.route.params.dishes ===  undefined &&
+              <Image
+              style={(globalStyles.e_layout, styles.image)}
+              source={{
+                uri: props.route.params.dish.picture,
+              }}
+              />
+            }
           <View style={(globalStyles.e_layout, styles.orderSuccess)}>
             <H1 style={styles.HeadingText}>Order placement succesfull.</H1>
             <H2 style={styles.SubHeadingText}>Your order:</H2>
-            <Text style={styles.IngredientsText}>Dish: {props.route.params.dish.title}</Text>
-            <Text style={styles.IngredientsText}>Date: {formatDate(Date.parse(props.route.params.date))}</Text>
+            
+            {
+              props.route.params.dishes !==  undefined ? (
+                props.route.params.dishes.map((dish) => (
+                  <>
+                    <Text style={styles.IngredientsText}>Dish: {dish.title}</Text>
+                    <Text style={styles.IngredientsText}>Date: {formatDate(Date.parse(dish.date))}</Text>
+                  </>
+                ))
+              ):(
+                <>
+                  <Text style={styles.IngredientsText}>Dish: {props.route.params.dish.title}</Text>
+                  <Text style={styles.IngredientsText}>Date: {formatDate(Date.parse(props.route.params.date))}</Text>
+                </>
+              )
+            }
+            
             <Text style={styles.IngredientsText}>
               Machine: {props.route.params.machine[props.route.params.machine_index].name} ({props.route.params.machine[props.route.params.machine_index].machine_id})
             </Text>
-            <TouchableOpacity style={globalStyles.button} onPress={() => props.navigation.goBack()}>
+            <TouchableOpacity style={globalStyles.button} onPress={() => props.navigation.navigate("Shop")}>
               {!loading ? <Text style={globalStyles.buttonText}>Go back</Text> : <ActivityIndicator size={"small"} color="#000" />}
             </TouchableOpacity>
           </View>
@@ -193,16 +253,28 @@ function PaymentScreen(props) {
               let result = e.url.replace("about:blank?", "");
               let data = JSON.parse('{"' + decodeURI(result).replace(/"/g, '\\"').replace(/&/g, '","').replace(/=/g, '":"') + '"}');
               setLoading(true);
-              handlePaymentOmise(data, (e) => {
+               handlePaymentOmise(data, (e) => {
                 handlePayment(e);
               });
             }
             if (e.url && e.url === "close") {
-              updateOrderPayment("failed", props.company.selectedCompany.company_id, props.route.params.aisle, props.route.params.machine, formatDate(Date.parse(props.route.params.date)), props.route.params.dish, props.company.selectedCompany.user_id, props.route.params.machine_index, () => {
-                deletePendingOrder(props.company.selectedCompany.user_id, () => {
-                  props.navigation.goBack();
+              if (props.route.params.dishes !== undefined) {
+                props.route.params.dishes.map((dish) =>{
+                  updateOrderPayment("failed", props.company.selectedCompany.company_id, props.route.params.aisle, props.route.params.machine, formatDate(Date.parse(dish.date)), dish, props.company.selectedCompany.user_id, props.route.params.machine_index, () => {
+                    deletePendingOrder(props.company.selectedCompany.user_id, () => {
+                     
+                    })
+                  });
                 })
-              });
+                props.navigation.goBack();
+              }else {
+                updateOrderPayment("failed", props.company.selectedCompany.company_id, props.route.params.aisle, props.route.params.machine, formatDate(Date.parse(props.route.params.date)), props.route.params.dish, props.company.selectedCompany.user_id, props.route.params.machine_index, () => {
+                  deletePendingOrder(props.company.selectedCompany.user_id, () => {
+                    props.navigation.goBack();
+                  })
+                });
+              }
+
             }
           }}
           useWebKit={true}

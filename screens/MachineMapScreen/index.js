@@ -193,7 +193,13 @@ function MachineMap(props) {
             id={machine.id}
             freePlaces="7 free aisles"
             subtitle={machine.location.number + " " + machine.location.street + ", " + machine.location.postal_code + " " + machine.location.region}
-            onPress={(e) => props.navigation.navigate("MachineDetail", {machine, dish: props.route.params.dish})}
+            onPress={(e) => {
+              props.route.params.dish !== undefined ? (
+                props.navigation.navigate("MachineDetail", {machine, dish: props.route.params.dish})
+              ):(
+                props.navigation.navigate("MachineDetail", {machine, dishes: props.route.params.dishes})
+              )
+            }}
           />
           ):(
             <MapCard

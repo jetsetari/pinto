@@ -28,15 +28,36 @@ function MachineDetail(props) {
   function chooseDish() {
     setLoading(true);
     
-    addOrderesDishToAisle(props.company.selectedCompany.individual_mode, props.company.selectedCompany.type, props.company.selectedCompany.company_id, [props.route.params.machine], formatDate(Date.parse(props.route.params.date)), props.route.params.dish, props.company.selectedCompany.user_id, 0, (result, idx, machine_index) => {
-      if (result === true) {
-        setLoading(false);
-        setMachineIndex(machine_index);
-        props.navigation.navigate("Payment", { dish: props.route.params.dish, aisle: idx, date: props.route.params.date, machine: [props.route.params.machine], machine_index: machine_index, result: result });
-      } else {
-        setMachineIsFull(true);
-      }
-    });
+    if (props.route.params.dishes !== undefined) {
+      let lastItem = props.route.params.dishes.length - 1;
+      props.route.params.dishes.forEach((dish, i) => {
+        addOrderesDishToAisle(props.company.selectedCompany.individual_mode, props.company.selectedCompany.type, props.company.selectedCompany.company_id, [props.route.params.machine], formatDate(Date.parse(dish.date)), dish, props.company.selectedCompany.user_id, 0, (result, idx, machine_index) => {
+          if (result === true) {
+            setLoading(false);
+            setMachineIndex(machine_index);
+            if(i === lastItem){
+              props.navigation.navigate("Payment", { date: formatDate(Date.parse(dish.date)), dishes: props.route.params.dishes, aisle: idx, machine: [props.route.params.machine], machine_index: machine_index, result: result });
+            }
+          } else {
+            setMachineIsFull(true);
+            if(i === lastItem){
+              props.navigation.navigate("Payment", { date: formatDate(Date.parse(dish.date)), dishes: props.route.params.dishes, aisle: idx, machine: [props.route.params.machine], machine_index: machine_index, result: result });
+            }
+          }
+        });
+      })
+      
+     } else {
+      addOrderesDishToAisle(props.company.selectedCompany.individual_mode, props.company.selectedCompany.type, props.company.selectedCompany.company_id, [props.route.params.machine], formatDate(Date.parse(props.route.params.date)), props.route.params.dish, props.company.selectedCompany.user_id, 0, (result, idx, machine_index) => {
+        if (result === true) {
+          setLoading(false);
+          setMachineIndex(machine_index);
+          props.navigation.navigate("Payment", { dish: props.route.params.dish, aisle: idx, date: props.route.params.date, machine: [props.route.params.machine], machine_index: machine_index, result: result });
+        } else {
+          setMachineIsFull(true);
+        }
+      });
+     }
   }
 
   return (
@@ -86,14 +107,30 @@ function MachineDetail(props) {
                     <Text style={styles.description}>{props.route.params.machine.formatted_address}</Text>
                   </SharedElement>
 
-                  <H3 style={styles.SubHeadingText}>Dish</H3>
-                  <Text style={styles.description}>{props.route.params.dish.title}</Text>
-
-                  <H3 style={styles.SubHeadingText}>Date</H3>
-                  <Text style={styles.description}>{formatDate(props.route.params.date)}</Text>
-
+                  {props.route.params.dish !== undefined ? (
+                    <>
+                      <H3 style={styles.SubHeadingText}>Dish</H3>
+                      <Text style={styles.description}>{props.route.params.dish.title}</Text>
+                    </>
+                  ):(
+                    <>
+                      <H3 style={styles.SubHeadingText}>Dishes</H3>
+                      {props.route.params.dishes.map(dish => (
+                        <>
+                          <Text style={styles.description}>{dish.title}</Text>
+                          <Text style={styles.description}>{formatDate(dish.date)}</Text>
+                        </>
+                      ))}
+                    </>
+                  )}
+                   {props.route.params.dish !== undefined &&
+                    <>
+                      <H3 style={styles.SubHeadingText}>Date</H3>
+                      <Text style={styles.description}>{formatDate(props.route.params.date)}</Text>
+                    </>
+                   }
                   <TouchableOpacity style={[globalStyles.mainButton, {marginTop: 20}]} onPress={() => (!loading ? chooseDish() : {})}>
-                    {!loading ? <Text style={globalStyles.mainButtonText}>Add dish to machine</Text> : <ActivityIndicator size={"small"} color="#000" />}
+                    {!loading ? <Text style={globalStyles.mainButtonText}>{props.route.params.dishes !== undefined ? ('Add dishes to machine') : ('Add dish to machine')}</Text> : <ActivityIndicator size={"small"} color="#000" />}
                   </TouchableOpacity>
                 </View>
               </>
