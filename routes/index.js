@@ -83,7 +83,9 @@ function SettingsStackScreen() {
       <SettingsStack.Screen name="Orders" component={OrdersScreen} />
       <SettingsStack.Screen name="Contact" component={ContactScreen} />
       <SettingsStack.Screen name="Terms" component={TermsScreen} />
+      <SettingsStack.Screen name="Notifications" component={NotificationsScreen} />
       <SettingsStack.Screen name="Company" component={CompanyScreen} />
+      <SettingsStack.Screen name="Wallet" component={WalletScreen} />
     </SettingsStack.Navigator>
   );
 }
@@ -112,7 +114,6 @@ function TabNavigation() {
       fontWeight: "bold"
     },
     cardStyle: { backgroundColor: "red" },
-
   };
   return (
     <Tab.Navigator
@@ -125,11 +126,8 @@ function TabNavigation() {
       }}
     >
       <Tab.Screen name="Food" component={HomeStackScreen} options={options} />
-      <Tab.Screen name="Wallet" component={WalletScreen} options={options} />
       <Tab.Screen name="Pick Up" component={PickUpStackScreen} options={options} />
-      <Tab.Screen name="Shop" component={CartScreen} options={options} />
       <Tab.Screen name="Account" component={SettingsStackScreen} options={options} />
-      <Tab.Screen name="Notifications" component={NotificationsScreen} options={options} />
     </Tab.Navigator>
   );
 }

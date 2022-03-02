@@ -89,14 +89,10 @@ function CartScreen(props) {
     }
   }
 
-  
   const purchase = (products) => {
     products.forEach(product => {
-
-       chooseDish(product) 
-
+       chooseDish(product);
     })
-    
   }
 
   return (

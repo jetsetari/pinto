@@ -15,7 +15,6 @@ function FoodList({ dishes, onDetailNavigationPress, type }) {
           <ListItem key={idx} style={styles.listItem}>
             <TouchableOpacity style={styles.listItemTouch} onPress={() => onDetailNavigationPress(dish)}>
               <SharedElement id={`item.${dish.id}.image_url`}>
-
                 <CachedImage style={styles.listImage} source={{ uri: dish.picture }} resizeMode="cover" />
               </SharedElement>
               <SharedElement id={`item.${dish.id}.title`}>

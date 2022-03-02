@@ -17,7 +17,7 @@ const S = StyleSheet.create({
     alignItems: "center",
   },
   inner: {
-    width: 250,
+    width: 150,
     height: 50,
     marginBottom: 20,
     borderRadius: 50,
@@ -41,7 +41,7 @@ const S = StyleSheet.create({
 
 function TabBar({ state, descriptors, navigation, dimensions, activeTintColor, inactiveTintColor }) {
   const { routes, index: activeRouteIndex } = state;
-  const tabWidth = 250 / routes.length;
+  const tabWidth = 150 / routes.length;
   const [translateValue] = useState(new Animated.Value(0));
   const insets = useSafeAreaInsets();
   useEffect(() => {

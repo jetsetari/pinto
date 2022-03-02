@@ -14,6 +14,9 @@ import { deletePendingOrder } from "../../firebase/firestore/deleteData";
 import Loading from "../../components/Loading";
 
 function PaymentScreen(props) {
+
+  console.log(props);
+
   const [loading, setLoading] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentFailed, setPaymentFailed] = useState(false);
@@ -55,11 +58,11 @@ function PaymentScreen(props) {
     </style>
   </head>
 
-  <!--<form id="checkoutForm">-->
-  <form id="checkoutForm" method="POST" action="https://us-central1-pinto-new-gen.cloudfunctions.net/handlePaymentOmisePinto">
+  <form id="checkoutForm">
+  <!--<form id="checkoutForm" method="POST" action="https://us-central1-pinto-new-gen.cloudfunctions.net/handlePaymentOmisePinto">-->
     <input type="hidden" name="omiseToken" />
     <input type="hidden" name="omiseSource" />
-    <input type="hidden" name="amount" value="${props.route.params.price * 100}" />
+    <input type="hidden" name="amount" value="${props.route.params.dish.price * 100}" />
     <input type="hidden" name="return_uri" />
     <input type="hidden" name="currency" value="THB" />
   </form>
@@ -82,7 +85,7 @@ function PaymentScreen(props) {
 
   <script>
     OmiseCard.configure({
-      publicKey: "pkey_test_5msne2abglnv66xyiqm",
+      publicKey: "pkey_test_5o7ylgkibcpkkugp3cy",
     });
 
     var button = document.querySelector("#checkoutButton");

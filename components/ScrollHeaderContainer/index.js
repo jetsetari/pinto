@@ -13,6 +13,8 @@ function ScrollHeaderContainer(props) {
   const insets = useSafeAreaInsets();
 
   const [showLargeTitles, setShowLargeTitles] = useState(true);
+  const [headerVisible, setHeaderVisible] = useState(false);
+
   const scale = useRef(new Animated.Value(0)).current;
   const translate_y = useRef(new Animated.Value(0)).current;
   const translate_x = useRef(new Animated.Value(0)).current;
@@ -24,6 +26,13 @@ function ScrollHeaderContainer(props) {
       setShowLargeTitles(true);
     }
   }
+
+  useEffect(() => {
+    if(props.headerVisible){
+      setHeaderVisible(props.headerVisible);
+    }
+
+  });
 
   useEffect(() => {
     if (!showLargeTitles) {
@@ -93,8 +102,9 @@ function ScrollHeaderContainer(props) {
   };
 
   return (
-    <Container style={{ ...styles.scrollView, paddingTop: insets.top }}>
-      <StatusBar style="light" hidden={false} />
+    <Container style={{ ...styles.scrollView, paddingTop: insets.top, marginTop: (headerVisible ? 0 : -50) }}>
+      <StatusBar style="light" hidden={true} />
+      { headerVisible ? (<>
       <Animated.Image
         source={require("../../assets/images/logo.png")}
         style={[
@@ -111,30 +121,30 @@ function ScrollHeaderContainer(props) {
           }
         ]}
       />
-      {!showLargeTitles ? (
-        <Header style={styles.smallTitles} hasTabs>
-          <View style={styles.e_layout_small_title}>
-            <Button style={{ position: "absolute", left: 0, ...styles.backButton }} onPress={() => (props.backButton ? props.navigation.goBack() : {})}>
-              <Image style={props.backButton ? { width: 35, height: 35 } : styles.backButtonHidden} source={require("../../assets/images/back.png")} />
-            </Button>
-            <FadeInView>
-              <Title style={styles.smallTitlesText}>{props.title}</Title>
-            </FadeInView>
-
-          </View>
-        </Header>
-      ) : (
-        <>
-          <Header style={styles.hidden_title}>
+        {!showLargeTitles ? (
+          <Header style={styles.smallTitles} hasTabs>
             <View style={styles.e_layout_small_title}>
-              <Title style={styles.smallTitlesText}></Title>
-            </View>
-            <Button style={{ position: "absolute", left: 0, ...styles.backButton }} onPress={() => (props.backButton ? props.navigation.goBack() : {})}>
+              <Button style={{ position: "absolute", left: 0, ...styles.backButton }} onPress={() => (props.backButton ? props.navigation.goBack() : {})}>
                 <Image style={props.backButton ? { width: 35, height: 35 } : styles.backButtonHidden} source={require("../../assets/images/back.png")} />
               </Button>
+              <FadeInView>
+                <Title style={styles.smallTitlesText}>{props.title}</Title>
+              </FadeInView>
+
+            </View>
           </Header>
-        </>
-      )}
+        ) : (
+          <>
+            <Header style={styles.hidden_title}>
+              <View style={styles.e_layout_small_title}>
+                <Title style={styles.smallTitlesText}></Title>
+              </View>
+              <Button style={{ position: "absolute", left: 0, ...styles.backButton }} onPress={() => (props.backButton ? props.navigation.goBack() : {})}>
+                  <Image style={props.backButton ? { width: 35, height: 35 } : styles.backButtonHidden} source={require("../../assets/images/back.png")} />
+                </Button>
+            </Header>
+          </>
+        )}</>) : <></> }
       <Content
         onScroll={(e) => handleScroll(e)}
         refreshControl={
@@ -151,13 +161,14 @@ function ScrollHeaderContainer(props) {
         <SafeAreaView style={{ flex: 0, backgroundColor: "#1E8C62" }} />
         <SafeAreaView style={styles.container}>
           <TouchableOpacity onPress={() => (props.backButton ? props.navigation.goBack() : {})}>
+            { headerVisible ? (
             <Header style={styles.header}>
               <View style={styles.e_layout_large_title}>
                 {/* <Ionicons style={props.backButton ? styles.backIcon : styles.backButtonHidden} name="chevron-back" size={30} color="#ffffff" /> */}
                 <Title style={styles.headerText}>{props.title}</Title>
-                <Image style={{ width: width, height: 20}} source={require("../../assets/line.png")} />
-              </View>
-            </Header>
+                {/*<Image style={{ width: width, height: 20}} source={require("../../assets/line.png")} />*/}              
+                </View>
+            </Header>) : <></> }
 
           </TouchableOpacity>
           <View style={styles.e_layout_container}>{props.children}</View>

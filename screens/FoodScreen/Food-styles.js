@@ -26,6 +26,24 @@ export const styles = StyleSheet.create({
     marginTop:50,
     flexDirection:"column", justifyContent:"center", alignItems:"center"
   },
+  bannerWrapper : {
+    width: "100%",
+    height: 300,
+    position: "relative"
+  },
+
+  bannerImage: {
+    width: "100%",
+    height: 300,
+    backgroundColor:"#006443",
+  },
+  arcImage: {
+    width: "100%",
+    height: 60,
+    position: "absolute",
+    bottom: 0,
+    zIndex: 9000
+  },
 
   tabBarUnderlineStyle: {
     borderBottomWidth: 45,
