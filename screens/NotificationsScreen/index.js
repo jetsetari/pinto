@@ -24,8 +24,8 @@ function NotificationsScreen({ navigation, company }) {
   }, []);
 
   return (
-    <ScrollHeaderContainer backButton={"Home"} navigation={navigation} title="Info">
-      <StatusBar style="light" />
+    <ScrollHeaderContainer backButton={"Home"} navigation={navigation} title="Notifications">
+      <StatusBar style="light"  hidden={true} />
       <View style={[globalStyles.e_layout, { marginTop: 20 }]}>
         {notify &&
           notify.map((item, idx) => (

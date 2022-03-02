@@ -139,13 +139,7 @@ function MachineMap(props) {
               },
             ],
           };
-          return (
-            <Marker key={index} coordinate={{ latitude: machine.location.lat, longitude: machine.location.lng }} onPress={(e) => onMarkerPress(e, false)}>
-              <Animated.View style={[scaleStyle, styles.marker]}>
-                <CustomMarker style={active === index ? styles.innerMarkerBlack : styles.innerMarkerWhite}>{active === index ? <Image source={require('../../assets/images/marker-active.png')} /> : <Image source={require('../../assets/images/marker.png')} />}</CustomMarker>
-              </Animated.View>
-            </Marker>
-          );
+          
         })}
       </MapView>
       <LocationSearch machines={machines} navigation={props.navigation} handlePlaceClick={(e) => onMarkerPress(e, true)} />

@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
   text_profile: {
     fontSize: 22,
     color: "#616161",
-    fontFamily: "JakartaBold"
+    fontFamily: "TitilliumBold"
   },
   camera_options: {
     backgroundColor: "#C21331",
@@ -105,7 +105,7 @@ export const styles = StyleSheet.create({
     fontSize: 26,
     marginBottom: 0,
     textAlign: "left",
-    fontFamily: "JakartaRegular"
+    fontFamily: "TitilliumRegular"
   },
   h1: {
     color: "#fff",
@@ -118,7 +118,7 @@ export const styles = StyleSheet.create({
     color: "#ffffff",
     marginBottom: 5,
     lineHeight: 20,
-    fontFamily: "JakartaRegular"
+    fontFamily: "TitilliumRegular"
   },
   info_text: {
     color: "#ffffff",

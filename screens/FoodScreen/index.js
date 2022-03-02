@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, Text, ActivityIndicator, SafeAreaView, Dimensions, ScrollView } from "react-native";
+import { View, Text, ActivityIndicator, SafeAreaView, Dimensions, ScrollView, Image } from "react-native";
 import { styles } from "./Food-styles";
 import { Container, Header, Left, Content, TabHeading, ScrollableTab, Title, Tab, Tabs } from "native-base";
 import { globalStyles } from "../../globalStyles";
@@ -7,6 +7,7 @@ import FoodList from "../../components/FoodList";
 import ScrollHeaderContainer from "../../components/ScrollHeaderContainer";
 import { getDateDishes, getMachines } from "../../firebase/firestore/getData";
 import { StatusBar } from "expo-status-bar";
+import CachedImage from "../../components/CachedImage";
 //Redux
 import { connect } from "react-redux";
 
@@ -42,7 +43,7 @@ function FoodScreen({ navigation, company }) {
         setMachine(result);
       });
 
-    let days = [1, 2, 3, 4, 5];
+    let days = [0, 1, 2, 3, 4, 5];
     let _next_days_dishes = [];
     iteration(days, 0, _next_days_dishes);
   }
@@ -82,12 +83,6 @@ function FoodScreen({ navigation, company }) {
     var now = new Date();
     let _next_day = now.getDay() + x;
     now.setDate(now.getDate() + ((_next_day + (7 - now.getDay())) % 7));
-    // if (now.getDay() === 0) {
-    //   now.setDate(now.getDate() + 1);
-    // }
-    // else if (now.getDay() === 6) {
-    //   now.setDate(now.getDate() + 2);
-    // }
     return now;
   }
 
@@ -112,9 +107,15 @@ function FoodScreen({ navigation, company }) {
     getDishes();
   }
 
+  let _link = "https://firebasestorage.googleapis.com/v0/b/pinto-new-gen.appspot.com/o/pinto%2Fproduct_images%2F5b03f2fb-cb69-0490-7c79-135e18883dfc.jpg?alt=media&token=1e3600a8-2b9f-4273-b3f9-e16d39ddcee8";
+
   return (
-    <ScrollHeaderContainer title="Meals" refreshEnabled={true} onRefresh={() => onRefresh()} refreshing={refreshing}>
-    <StatusBar style="light" hidden={false} />
+    <ScrollHeaderContainer headerVisible={false} title="Meals" refreshEnabled={true} onRefresh={() => onRefresh()} refreshing={refreshing}>
+    <StatusBar style="light" hidden={true} />
+      <View style={styles.bannerWrapper}>
+        <Image style={styles.bannerImage} source={{uri: _link }}/>
+        <Image style={styles.arcImage} source={require("../../assets/images/arc.png")}/>
+      </View>
       {dishes ? (
         <Tabs renderTabBar={() => <ScrollableTab style={styles.ScrollableTab} tabsContainerStyle={styles.tabsContainerStyle} />} style={styles.TabBarStyle} underlineStyle={styles.underlineStyle} tabBarUnderlineStyle={styles.tabBarUnderlineStyle} tabContainerStyle={styles.tabContainerStyle} onChangeTab={({ i }) => setCurrentTab(i)}>
           {dishes.map((item, idx) => (

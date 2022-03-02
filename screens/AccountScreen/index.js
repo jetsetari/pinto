@@ -14,8 +14,10 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import ScrollHeaderContainer from "../../components/ScrollHeaderContainer";
 import CachedImage from "../../components/CachedImage";
+import { getUser } from "../../firebase/firestore/getData";
 
 function AccountScreen({ navigation, setSelectedCompany, company }) {
+  const [wallet, setWallet] = useState(null);
   const onOrdersPress = (dish, fullDate) => {
     navigation.navigate("Orders");
   };
@@ -23,6 +25,12 @@ function AccountScreen({ navigation, setSelectedCompany, company }) {
     setSelectedCompany({});
     doSignOut();
   }
+  useEffect(() => {
+    getUser(company.user_id, (result) => {
+      setWallet(result.wallet);
+    })
+  }, [wallet])
+
   return (
     <ScrollHeaderContainer title="Account">
       <>
@@ -73,6 +81,15 @@ function AccountScreen({ navigation, setSelectedCompany, company }) {
             <Ionicons name="arrow-forward" size={22} color={"#ffffff"} />
           </View>
         </TouchableOpacity>
+        <TouchableOpacity style={styles.accountlistitem} onPress={() => navigation.navigate("Notifications")}>
+          <View style={(globalStyles.e_layout, globalStyles.accountlistitem_content)}>
+            {/* <View style={styles.icon}>
+              <Ionicons name="document-outline" size={22} color={"#ffffff"} />
+            </View> */}
+            <Text style={[globalStyles.mainButtonText, styles.btnText]}> Notifications</Text>
+            <Ionicons name="arrow-forward" size={22} color={"#ffffff"} />
+          </View>
+        </TouchableOpacity>
         <TouchableOpacity style={styles.accountlistitem} onPress={() => navigation.push("HelpStackScreen")}>
           <View style={(globalStyles.e_layout, globalStyles.accountlistitem_content)}>
             {/* <View style={styles.icon}>
@@ -83,7 +100,19 @@ function AccountScreen({ navigation, setSelectedCompany, company }) {
           </View>
         </TouchableOpacity>
 
-        <View style={{marginBottom: 60, ...globalStyles.e_layout}}>
+        <View style={{width: '100%',marginBottom: 0, ...globalStyles.e_layout, marginTop: 0}}>
+          <TouchableOpacity style={{ width: '100%', ...globalStyles.mainLineWhiteButton}} onPress={() => navigation.navigate("Wallet") }>
+            <View style={styles.icon}>
+              <Ionicons name="card-outline" size={22} color={"#ffffff"} />
+            </View>
+            <Text style={[globalStyles.mainButtonText, styles.btnText, { marginLeft: 10, lineHeight: 35}]}> Wallet {"\n"}<Text style={{ fontSize: 30, fontFamily: "TitilliumLight" }}>{ wallet } bth</Text></Text>
+            <View style={{marginLeft: 'auto', marginRight: 20, width: 100, ...globalStyles.mainLineButton}}>
+              <Text style={globalStyles.mainLineButtonText}>Add credit</Text>
+            </View>
+          </TouchableOpacity>
+        </View>
+
+        <View style={{marginBottom: 60, ...globalStyles.e_layout, marginTop: 20}}>
           <TouchableOpacity style={globalStyles.mainLineButton} onPress={() => signOutPress()}>
             <Text style={globalStyles.mainLineButtonText}>Sign Out</Text>
           </TouchableOpacity>

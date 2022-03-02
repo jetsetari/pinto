@@ -10,12 +10,12 @@ export const styles = StyleSheet.create({
     color:"#ffffff",
     fontSize:28,
     paddingLeft:0,
-    paddingTop: 55,
+    marginTop: 5,
     fontFamily: "TitilliumBold",
   },
   description:{
     color:"#ffffff",
-    marginTop:10,
+    marginTop:0,
     fontFamily: "TitilliumLight",
     fontSize: 18,
     lineHeight: 25
@@ -23,29 +23,8 @@ export const styles = StyleSheet.create({
   SubHeadingText:{
     color:"#ACC63C",
     fontSize: 18,
-    marginTop:40,
+    marginTop:10,
     fontFamily: "TitilliumBold",
-  },
-  BackArrowWrap:{
-    top:0,
-    left:0,
-    position: 'absolute',
-    backgroundColor:"#2A3E37",
-    zIndex:998,
-    width: 0,
-    height: 0,
-    backgroundColor: "transparent",
-    borderStyle: "solid",
-    borderRightWidth: 100,
-    borderTopWidth: 100,
-    borderRightColor: "transparent",
-    borderTopColor: "#2A3E37",
-  },
-  BackArrow:{
-    zIndex:999,
-    position: 'absolute',
-    top:17,
-    left:10,
   }
 });
 

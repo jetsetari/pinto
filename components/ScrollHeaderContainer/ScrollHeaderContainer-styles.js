@@ -5,7 +5,7 @@ let main_green = "#123835"; //"#1E8C62"
 
 export const styles = StyleSheet.create({
   scrollView:{
-    backgroundColor: light_green
+    backgroundColor: main_green
   },
   container:{
     flex: 1,
@@ -19,7 +19,7 @@ export const styles = StyleSheet.create({
     fontFamily: "TitilliumBold",
   },
   header:{
-    backgroundColor: light_green,
+    backgroundColor: main_green,
     height:45,
     width: 200,
     paddingLeft:20,
@@ -82,7 +82,7 @@ backIcon: {
     marginBottom: 20
   },
   smallTitles:{
-    backgroundColor: light_green,
+    backgroundColor: main_green,
     borderBottomColor:"#006443",
     borderBottomWidth:1,
     paddingLeft:0,
@@ -92,7 +92,7 @@ backIcon: {
     alignItems: "flex-start",
   },
   hidden_title:{
-    backgroundColor: light_green,
+    backgroundColor: main_green,
     borderBottomWidth:0,
     paddingLeft:0,
     height: Platform.OS === "ios" ? 50 : 70,

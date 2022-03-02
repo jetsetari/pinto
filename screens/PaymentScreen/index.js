@@ -14,6 +14,9 @@ import { deleteFromCart, deletePendingOrder } from "../../firebase/firestore/del
 import Loading from "../../components/Loading";
 
 function PaymentScreen(props) {
+
+  console.log(props);
+
   const [loading, setLoading] = useState(false);
   const [paymentSuccess, setPaymentSuccess] = useState(false);
   const [paymentFailed, setPaymentFailed] = useState(false);
@@ -68,12 +71,19 @@ function PaymentScreen(props) {
   </head>
 
   <form id="checkoutForm">
+<<<<<<< HEAD
   <!--<form id="checkoutForm" method="POST" action="https://us-central1-pinto-new-gen.cloudfunctions.net/handlePaymentOmisePinto">--!>
     <input type="hidden" name="omiseToken" />
     <input type="hidden" name="omiseSource" />
     <input type="hidden" name="amount" value="${props.route.params.dishes !== undefined ? (
       moneyCount*100
     ) : (props.route.params.dish.price*100)}" />
+=======
+  <!--<form id="checkoutForm" method="POST" action="https://us-central1-pinto-new-gen.cloudfunctions.net/handlePaymentOmisePinto">-->
+    <input type="hidden" name="omiseToken" />
+    <input type="hidden" name="omiseSource" />
+    <input type="hidden" name="amount" value="${props.route.params.dish.price * 100}" />
+>>>>>>> c1e740a90bc78820fb684e1344dad4eeab3e0acf
     <input type="hidden" name="return_uri" />
     <input type="hidden" name="currency" value="THB" />
   </form>
@@ -96,7 +106,7 @@ function PaymentScreen(props) {
 
   <script>
     OmiseCard.configure({
-      publicKey: "pkey_test_5msne2abglnv66xyiqm",
+      publicKey: "pkey_test_5o7ylgkibcpkkugp3cy",
     });
 
     var button = document.querySelector("#checkoutButton");

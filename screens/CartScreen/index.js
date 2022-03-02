@@ -87,12 +87,17 @@ function CartScreen(props) {
     }
   }
 
-  
   const purchase = (products) => {
+<<<<<<< HEAD
     chooseDishes(products) 
 
 
     
+=======
+    products.forEach(product => {
+       chooseDish(product);
+    })
+>>>>>>> c1e740a90bc78820fb684e1344dad4eeab3e0acf
   }
 
   return (

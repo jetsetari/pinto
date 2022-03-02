@@ -45,6 +45,17 @@ export const globalStyles = StyleSheet.create({
     borderRadius: borderRadius,
     paddingLeft: 15
   },
+  mainLineWhiteButton: {
+    height: 90,
+    alignSelf: "stretch",
+    marginTop: 20,
+    borderColor: "#4D6967",
+    borderWidth: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    borderRadius: borderRadius,
+    paddingLeft: 15
+  },
   mainLineButtonText: {
     fontFamily: "TitilliumLight",
     fontSize: 18,
