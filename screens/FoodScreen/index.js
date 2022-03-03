@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, Text, ActivityIndicator, TouchableOpacity, SafeAreaView, Dimensions, ScrollView, Image } from "react-native";
+import { View, Text, ActivityIndicator, TouchableOpacity, Modal, SafeAreaView, Dimensions, ScrollView, Image } from "react-native";
 import { styles } from "./Food-styles";
 import { Container, Header, Left, Content, TabHeading, ScrollableTab, Title, Tab, Tabs } from "native-base";
 import { globalStyles } from "../../globalStyles";
@@ -8,6 +8,7 @@ import ScrollHeaderContainer from "../../components/ScrollHeaderContainer";
 import { getDateDishes, getMachines, getCompanyById, getCartProducts } from "../../firebase/firestore/getData";
 import { StatusBar } from "expo-status-bar";
 import CachedImage from "../../components/CachedImage";
+import Loading from "../../components/Loading";
 
 //Redux
 import { connect } from "react-redux";
@@ -27,6 +28,8 @@ function FoodScreen({ navigation, company }) {
   const [machine, setMachine] = useState("");
   const [banner, setBanner] = useState("");
   const [cart, setCart] = useState(false);
+  const [promo, setPromo] = useState(false);
+  const [promoVisible, setPromoVisible] = useState(true);
 
   useEffect(() => {
     setLoading(true);
@@ -48,6 +51,8 @@ function FoodScreen({ navigation, company }) {
     company.selectedCompany.company_id !== undefined &&
       getCompanyById(company.selectedCompany.company_id, (result) => {
         setBanner(result.banner);
+        console.log(result.promo);
+        setPromo(result.promo);
       });
   }, [company.selectedCompany]);
 
@@ -127,49 +132,70 @@ function FoodScreen({ navigation, company }) {
   let _link = banner;
 
   return (
-    <ScrollHeaderContainer headerVisible={false} title="Meals" refreshEnabled={true} onRefresh={() => onRefresh()} refreshing={refreshing}>
+    <>
       <StatusBar style="light" hidden={true} />
-      { cart ? (
-      <TouchableOpacity style={ styles.cart } onPress={() => navigation.navigate("Cart") }>
-        <View style={styles.cartlogo}>
-          <Feather name="shopping-bag" size={22} color="#000" />
+      { promo ? (
+        <Modal
+            animationType="slide"
+            transparent={true}
+            visible={promoVisible}
+            onRequestClose={() => {
+              Alert.alert("Modal has been closed.");
+              setPromoVisible(!promoVisible);
+            }}
+          >
+            <View style={ styles.modalPromo }>
+              <TouchableOpacity style={styles.modalPromoView} onPress={() => setPromoVisible(false)}>
+                <Feather name="x" size={20} color="#000" />
+              </TouchableOpacity>
+              <Image style={styles.modalPromoImage} source={{uri: promo }}/>
+              <Loading />
+            </View>
+        </Modal>
+      ): <></>}
+      <ScrollHeaderContainer headerVisible={false} title="Meals" refreshEnabled={true} onRefresh={() => onRefresh()} refreshing={refreshing}>
+        
+        { cart ? (
+        <TouchableOpacity style={ styles.cart } onPress={() => navigation.navigate("Cart") }>
+          <View style={styles.cartlogo}>
+            <Feather name="shopping-bag" size={22} color="#000" />
+          </View>
+          <View style={ styles.cartvalue }><Text style={ styles.carttext }>{ cart }</Text></View>
+        </TouchableOpacity> ) : <></> }
+        <View style={styles.bannerWrapper}>
+          <Image style={styles.bannerImage} source={{uri: _link }}/>
+          <Image style={styles.arcImage} source={require("../../assets/images/arc.png")}/>
         </View>
-        <View style={ styles.cartvalue }><Text style={ styles.carttext }>{ cart }</Text></View>
-      </TouchableOpacity> ) : <></> }
-      <View style={styles.bannerWrapper}>
-        <Image style={styles.bannerImage} source={{uri: _link }}/>
-        <Image style={styles.arcImage} source={require("../../assets/images/arc.png")}/>
-      </View>
-      
-      {dishes ? (
-        <Tabs renderTabBar={() => <ScrollableTab style={styles.ScrollableTab} tabsContainerStyle={styles.tabsContainerStyle} />} style={styles.TabBarStyle} underlineStyle={styles.underlineStyle} tabBarUnderlineStyle={styles.tabBarUnderlineStyle} tabContainerStyle={styles.tabContainerStyle} onChangeTab={({ i }) => setCurrentTab(i)}>
-          {dishes.map((item, idx) => (
-           
-            <Tab
-              key={idx}
-              heading={
-                <TabHeading style={styles.TabHeadingContainer}>
-                  <Text style={currentTab === idx ? styles.ActiveTabHeading : styles.TabHeading}>{item.weekDay}</Text>
-                  <Text style={currentTab === idx ? styles.ActiveTabSubHeading : styles.TabSubHeading}>{item.date}</Text>
-                </TabHeading>
-              }
-              style={styles.backgroundTabBar}
-              tabStyle={styles.tabStyle}
-              textStyle={styles.textStyle}
-              activeTabStyle={styles.activeTabStyle}
-              activeTextStyle={styles.activeTextStyle}
-            >
-              <FoodList dishes={loading ? "loading" : item.dishes} onDetailNavigationPress={(dish) => onDetailNavigationPress(dish, item.fullDate)} />
-            </Tab>
-          ))}
-        </Tabs>
-      ) : (
-        <View style={styles.loadingContainer}>
-          <ActivityIndicator size={"small"} color="#fff" />
-        </View>
-      )}
-
-    </ScrollHeaderContainer>
+        
+        {dishes ? (
+          <Tabs renderTabBar={() => <ScrollableTab style={styles.ScrollableTab} tabsContainerStyle={styles.tabsContainerStyle} />} style={styles.TabBarStyle} underlineStyle={styles.underlineStyle} tabBarUnderlineStyle={styles.tabBarUnderlineStyle} tabContainerStyle={styles.tabContainerStyle} onChangeTab={({ i }) => setCurrentTab(i)}>
+            {dishes.map((item, idx) => (
+             
+              <Tab
+                key={idx}
+                heading={
+                  <TabHeading style={styles.TabHeadingContainer}>
+                    <Text style={currentTab === idx ? styles.ActiveTabHeading : styles.TabHeading}>{item.weekDay}</Text>
+                    <Text style={currentTab === idx ? styles.ActiveTabSubHeading : styles.TabSubHeading}>{item.date}</Text>
+                  </TabHeading>
+                }
+                style={styles.backgroundTabBar}
+                tabStyle={styles.tabStyle}
+                textStyle={styles.textStyle}
+                activeTabStyle={styles.activeTabStyle}
+                activeTextStyle={styles.activeTextStyle}
+              >
+                <FoodList dishes={loading ? "loading" : item.dishes} onDetailNavigationPress={(dish) => onDetailNavigationPress(dish, item.fullDate)} />
+              </Tab>
+            ))}
+          </Tabs>
+        ) : (
+          <View style={styles.loadingContainer}>
+            <ActivityIndicator size={"small"} color="#fff" />
+          </View>
+        )}
+      </ScrollHeaderContainer>
+    </>
   );
 }
 

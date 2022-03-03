@@ -17,6 +17,10 @@ export const styles = StyleSheet.create({
     marginTop: 40
   },
 
+  modalPromo: { width: '100%', height: '100%', flex: 1, backgroundColor: '#000000', alignItems: 'center', justifyContent: "center"},
+  modalPromoView : { width: 40, height: 40, backgroundColor: '#FFFFFF', alignItems: 'center', justifyContent: "center", position: "absolute", right: 40, top: 40, zIndex: 99999, borderRadius: 100000 },
+  modalPromoImage : {width: '100%', height: '100%', resizeMode: 'cover', position: 'absolute', zIndex: 88},
+
   cart: {  
     top: 230, 
     right: 30, 
