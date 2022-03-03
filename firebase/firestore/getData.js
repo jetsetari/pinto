@@ -94,7 +94,9 @@ export const getCartProducts = (uid, callback) => {
                 db.collection("companies").doc(doc.data().company_id).collection('clients').doc(uid).collection("cart").get().then(function (querySnapshot) {
                   let data = [];
                   querySnapshot.forEach(function (cartDoc) {
-                    let _push = cartDoc.data(); _push.id = cartDoc.id;
+                    let _push = cartDoc.data(); 
+                    _push.food_id = _push.id;
+                    _push.id = cartDoc.id;
                     data.push(_push);
                   });
                   callback(data);

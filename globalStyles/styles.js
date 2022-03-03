@@ -72,7 +72,6 @@ export const globalStyles = StyleSheet.create({
   container:{
     flex: 1,
     backgroundColor: "#123835",
-    
   },
   e_layout_container: {
     flex: 1,

@@ -41,6 +41,7 @@ function HomeStackScreen() {
       }}
     >
       <NewStack.Screen name="Home" component={FoodScreen} />
+      <NewStack.Screen name="Cart" component={CartScreen} />
       <NewStack.Screen name="Details" component={FoodDetailScreen} />
     </NewStack.Navigator>
   );

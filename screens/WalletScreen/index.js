@@ -36,7 +36,7 @@ function WalletScreen(props) {
   return (
     <ScrollHeaderContainer title="Wallet" backButton="Account" navigation={props.navigation}>
       <StatusBar hidden={true} style="light" />
-        <SafeAreaView style={{ flexDirection: 'column', width: "100%", alignItems: 'center' }}>
+        <SafeAreaView style={{ flexDirection: 'column', width: "100%", marginTop: 70, alignItems: 'center' }}>
           <View style={globalStyles.e_layout}>
 
             <H1 style={styles.HeadingText}>Amount</H1>

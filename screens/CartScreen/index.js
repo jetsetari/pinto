@@ -12,6 +12,10 @@ import { View } from "react-native-animatable";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 import { Feather } from "@expo/vector-icons";
 
+import { globalStyles } from "../../globalStyles/styles.js";
+import { styles } from "./Cart-styles.js";
+import CachedImage from "../../components/CachedImage";
+
 
 function CartScreen(props) {
   const [products, setProducts] = useState([]);
@@ -21,16 +25,33 @@ function CartScreen(props) {
   const [promoLoading, setPromoLoading] = useState(false);
   const [found_promo, set_found_promo] = useState(0);
 
-  useEffect(() => {
+  const [refreshing, setRefreshing] = useState(false);
+  const [totalprice, setTotalprice] = useState(0);
+
+  const getCart = () => {
     getCartProducts(props.company.selectedCompany.user_id, (result) => {
       setProducts(result);
     })
-  }, [products])
+  };
+
+  useEffect(() => {
+    getCart();
+    let price = 0;
+    products.map(function(element, index) { 
+      price = price+parseFloat(element.price);
+    });
+    setTotalprice(price);
+  }, [products]);
+
+  const onRefresh = ()  => {
+    setRefreshing(true);
+    getCart();
+  }
 
   const deleteItem = (product_id) => {
     deleteFromCart(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, product_id, () => {
-      getUser(props.company.selectedCompany.user_id, (result) => {
-        setProducts(result)
+      getCartProducts(props.company.selectedCompany.user_id, (result) => {
+        setProducts(result);
       });
     })
   }
@@ -88,45 +109,44 @@ function CartScreen(props) {
   }
 
   const purchase = (products) => {
-<<<<<<< HEAD
-    chooseDishes(products) 
-
-
-    
-=======
-    products.forEach(product => {
-       chooseDish(product);
-    })
->>>>>>> c1e740a90bc78820fb684e1344dad4eeab3e0acf
+    //products.forEach(product => {
+       chooseDishes(products);
+    //})
   }
 
   return (
-    <ScrollHeaderContainer title="Cart" >
-      <StatusBar hidden={false} style="light" />
-      <Content style={{marginTop: 50, color: "white"}}>
+    <ScrollHeaderContainer headerVisible={false} title="Cart" refreshEnabled={true} onRefresh={() => onRefresh()} refreshing={refreshing}>
+      <StatusBar style="light" hidden={true} />
+      <View style={ styles.container }>
+        <Text style={ styles.headerText }>Cart</Text>
         {products.map(product => (
-          <>
-            <Text>{product?.title}</Text>
-            <Text>{product?.date}</Text>
-            <Button title="delete item" onPress={() => deleteItem(product.id)}/>
-          </>
+          <View style={ styles.item }>
+            <CachedImage style={styles.listImage} source={{ uri: product?.picture }} resizeMode="cover" />
+            <View style={ styles.textWrap }>
+              <Text style={ styles.productTitle }>{product?.title}</Text>
+              <Text style={ styles.productDate }>{product?.date}</Text>
+            </View>
+            <TouchableOpacity  style={styles.deleteItem} onPress={() => deleteItem(product.id)}>
+              <Feather name="trash-2" size={22} color="#FFF" />
+            </TouchableOpacity>
+          </View>
         ))}
 
         <View >
           <View style={{ flexDirection: "row" }}>
-            <TextInput editable={!loading} textAlign={"center"} placeholder="Promo code" placeholderTextColor="#A8A8A8" returnKeyType="done" value={promo} onChangeText={(e) => setPromo(e)} />
-            <TouchableOpacity onPress={() => getPromoCode()}>
+            <TextInput textAlign={"left"} placeholder="Promo code" style={globalStyles.inputText} placeholderTextColor="#A8A8A8" value={promo} onChangeText={(e) => setPromo(e)} />
+            <TouchableOpacity style={ styles.promoButton } onPress={() => getPromoCode()}>
               {promoLoading ? <ActivityIndicator size="small" color="#fff" /> : <Feather name="chevrons-right" size={22} color="#fff" />}
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => addToCart(dish)} >
-              <Text style={{color: 'white', marginRight: 10}}>Add to cart</Text><Feather name="shopping-bag" size={22} color="#fff" />
             </TouchableOpacity>
           </View>
         </View>
 
-        <Button title="purchase items" onPress={() => purchase(products)}/>
-        
-      </Content>
+
+        <TouchableOpacity style={[globalStyles.mainButton, {marginTop: 20, marginBottom: 70, width: '100%'}]} onPress={() => purchase(products)}>
+            <Text style={globalStyles.mainButtonText}>Purchase Items ( {totalprice} thb)</Text>
+        </TouchableOpacity>
+
+      </View>
     </ScrollHeaderContainer>
   );
 }

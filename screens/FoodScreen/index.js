@@ -1,15 +1,17 @@
 import React, { useEffect, useState, useRef } from "react";
-import { View, Text, ActivityIndicator, SafeAreaView, Dimensions, ScrollView, Image } from "react-native";
+import { View, Text, ActivityIndicator, TouchableOpacity, SafeAreaView, Dimensions, ScrollView, Image } from "react-native";
 import { styles } from "./Food-styles";
 import { Container, Header, Left, Content, TabHeading, ScrollableTab, Title, Tab, Tabs } from "native-base";
 import { globalStyles } from "../../globalStyles";
 import FoodList from "../../components/FoodList";
 import ScrollHeaderContainer from "../../components/ScrollHeaderContainer";
-import { getDateDishes, getMachines } from "../../firebase/firestore/getData";
+import { getDateDishes, getMachines, getCompanyById, getCartProducts } from "../../firebase/firestore/getData";
 import { StatusBar } from "expo-status-bar";
 import CachedImage from "../../components/CachedImage";
+
 //Redux
 import { connect } from "react-redux";
+import { Feather } from "@expo/vector-icons";
 
 function FoodScreen({ navigation, company }) {
   const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
@@ -22,6 +24,8 @@ function FoodScreen({ navigation, company }) {
   const [loading, setLoading] = useState(true);
   const [machineId, setMachineId] = useState("");
   const [machine, setMachine] = useState("");
+  const [banner, setBanner] = useState("");
+  const [cart, setCart] = useState(false);
 
   useEffect(() => {
     setLoading(true);
@@ -35,6 +39,21 @@ function FoodScreen({ navigation, company }) {
         setMachine(result);
       });
   }, [company.selectedCompany]);
+
+  useEffect(() => {
+    company.selectedCompany.company_id !== undefined &&
+      getCompanyById(company.selectedCompany.company_id, (result) => {
+        setBanner(result.banner);
+      });
+  }, [company.selectedCompany]);
+
+  useEffect(() => {
+    getCartProducts(company.selectedCompany.user_id, (result) => {
+      setCart(result.length);
+    })
+  }, [company.selectedCompany]);
+
+  
 
   function getDishes() {
     company.selectedCompany.company_id !== undefined &&
@@ -107,15 +126,23 @@ function FoodScreen({ navigation, company }) {
     getDishes();
   }
 
-  let _link = "https://firebasestorage.googleapis.com/v0/b/pinto-new-gen.appspot.com/o/pinto%2Fproduct_images%2F5b03f2fb-cb69-0490-7c79-135e18883dfc.jpg?alt=media&token=1e3600a8-2b9f-4273-b3f9-e16d39ddcee8";
+  let _link = banner;
 
   return (
     <ScrollHeaderContainer headerVisible={false} title="Meals" refreshEnabled={true} onRefresh={() => onRefresh()} refreshing={refreshing}>
-    <StatusBar style="light" hidden={true} />
+      <StatusBar style="light" hidden={true} />
+      { cart ? (
+      <TouchableOpacity style={ styles.cart } onPress={() => navigation.navigate("Cart") }>
+        <View style={styles.cartlogo}>
+          <Feather name="shopping-bag" size={22} color="#000" />
+        </View>
+        <View style={ styles.cartvalue }><Text style={ styles.carttext }>{ cart }</Text></View>
+      </TouchableOpacity> ) : <></> }
       <View style={styles.bannerWrapper}>
         <Image style={styles.bannerImage} source={{uri: _link }}/>
         <Image style={styles.arcImage} source={require("../../assets/images/arc.png")}/>
       </View>
+      
       {dishes ? (
         <Tabs renderTabBar={() => <ScrollableTab style={styles.ScrollableTab} tabsContainerStyle={styles.tabsContainerStyle} />} style={styles.TabBarStyle} underlineStyle={styles.underlineStyle} tabBarUnderlineStyle={styles.tabBarUnderlineStyle} tabContainerStyle={styles.tabContainerStyle} onChangeTab={({ i }) => setCurrentTab(i)}>
           {dishes.map((item, idx) => (
@@ -143,6 +170,7 @@ function FoodScreen({ navigation, company }) {
           <ActivityIndicator size={"small"} color="#fff" />
         </View>
       )}
+
     </ScrollHeaderContainer>
   );
 }

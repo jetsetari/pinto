@@ -12,7 +12,7 @@ import { Feather } from "@expo/vector-icons";
 import { connect } from "react-redux";
 import { addEmployeesOrder, addOrderesDishToAisle, addProductToCart } from "../../firebase/firestore/saveData";
 import CachedImage from "../../components/CachedImage";
-import { findPromo } from "../../firebase/firestore/getData";
+import { findPromo, getCartProducts } from "../../firebase/firestore/getData";
 
 function FoodDetailScreen(props) {
   const [machineAisles, setMachineAisles] = useState([]);
@@ -26,6 +26,8 @@ function FoodDetailScreen(props) {
   const [found_promo, set_found_promo] = useState(0);
   const buttonRef = useRef();
   const dish = props.route.params.dish;
+  const [cart, setCart] = useState(0);
+  const [cartcurrent, setCartcurrent] = useState(0);
 
 
   function formatDate(date) {
@@ -69,9 +71,25 @@ function FoodDetailScreen(props) {
     }
   }
 
-  function addToCart(product) {
-    addProductToCart(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, product, formatDate(Date.parse(props.route.params.date)), () => {})
+  function setCartProducts() {
+    getCartProducts(props.company.selectedCompany.user_id, (result) => {
+      let _date = formatDate(props.route.params.date);
+      let _dish_id = dish.id;
+      let _filter = result.filter(function (el){ return el.food_id == _dish_id && el.date <= _date });
+      setCartcurrent(_filter.length);
+      setCart(result.length);
+    })
   }
+
+  function addToCart(product) {
+    addProductToCart(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, product, formatDate(Date.parse(props.route.params.date)), () => {
+      setCartProducts();
+    })
+  }
+
+  useEffect(() => {
+    setCartProducts();
+  }, [props.company.selectedCompany]);
 
   function getPromoCode() {
     setPromoLoading(true);
@@ -88,6 +106,15 @@ function FoodDetailScreen(props) {
   return (
     <Container style={globalStyles.scrollView}>
     <StatusBar style="light" hidden={false} />
+      { cart ? (
+      <TouchableOpacity style={ styles.cart } onPress={() => props.navigation.navigate("Cart") }>
+        <View style={styles.cartlogo}>
+          <Feather name="shopping-bag" size={22} color="#000" />
+        </View>
+        <View style={ styles.cartvalue }><Text style={ styles.carttext }>{ cart }</Text></View>
+      </TouchableOpacity> ) : <></> }
+
+
       <SharedElement id={`item.${dish.id}.image_url`}>
         <CachedImage style={styles.image} source={{ uri: dish.picture }} resizeMode="cover" />
       </SharedElement>
@@ -126,7 +153,7 @@ function FoodDetailScreen(props) {
                   <SharedElement id={`item.${dish.id}.title`}>
                     <H1 style={styles.HeadingText}>{dish.title}</H1>
                   </SharedElement>
-                  <Text style={styles.description}>{dish.description}</Text>
+                  {/*<Text style={styles.description}>{dish.description}</Text> */}
                   <H3 style={styles.SubHeadingText}>Ingredients</H3>
                   <Text style={styles.IngredientsText}>{dish.ingredients}</Text>
 
@@ -134,38 +161,41 @@ function FoodDetailScreen(props) {
                     <>
                       <View style={styles.priceWrap}>
                         <View style={{ flexDirection: "row" }}>
-                          <TextInput editable={!loading} textAlign={"center"} style={styles.promo} placeholder="Promo code" placeholderTextColor="#A8A8A8" returnKeyType="done" value={promo} onChangeText={(e) => setPromo(e)} />
-                          <TouchableOpacity style={{ ...styles.getPromo }} onPress={() => getPromoCode()}>
-                            {promoLoading ? <ActivityIndicator size="small" color="#fff" /> : <Feather name="chevrons-right" size={22} color="#fff" />}
-                          </TouchableOpacity>
-                          <TouchableOpacity style={{ ...styles.toCart }} onPress={() => addToCart(dish)} >
-                            <Text style={{color: 'white', marginRight: 10}}>Add to cart</Text><Feather name="shopping-bag" size={22} color="#fff" />
-                          </TouchableOpacity>
+                          <View style={{ width: '100%', flexDirection: "row", marginTop: 10}}>
+                            <TextInput editable={!loading} textAlign={"center"} style={styles.promo} placeholder="Promo code" placeholderTextColor="#FFFFFF" returnKeyType="done" value={promo} onChangeText={(e) => setPromo(e)} />
+                            <TouchableOpacity style={{ ...styles.getPromo }} onPress={() => getPromoCode()}>
+                              {promoLoading ? <ActivityIndicator size="small" color="#fff" /> : <Feather name="chevrons-right" size={22} color="#fff" />}
+                            </TouchableOpacity>
+                          </View>
+                          <View style={styles.price_inner_wrap}>
+                            <H3 style={styles.size_title}>Price</H3>
+                            <View style={{ marginTop: 10, flexDirection: "row", alignItems: "center" }}>
+                              <PriceSymbol />
+                              <Price>{dish.price - found_promo}</Price>
+                            </View>
+                          </View>
                         </View>
                       </View>
 
                       <View style={styles.priceWrap}>
-                        <View style={styles.price_inner_wrap}>
-                          <H3 style={styles.size_title}>Price</H3>
-                          <View style={{ marginTop: 10, flexDirection: "row", alignItems: "center" }}>
-                            <PriceSymbol />
-                            <Price>{dish.price - found_promo}</Price>
-                          </View>
-                        </View>
-                        <View>
-                          <TouchableOpacity style={styles.button} onPress={() => (!loading ? chooseDish() : {})}>
-                            {loading ? (
-                              <View>
-                                <ActivityIndicator size="small" color="#fff" />
-                              </View>
-                            ) : (
-                              <>
-                                <ShoppingCar />
-                                <Text style={styles.buttonText}>Buy 1 now</Text>
-                              </>
-                            )}
-                          </TouchableOpacity>
-                        </View>
+                        <TouchableOpacity style={styles.button} onPress={() => (!loading ? chooseDish() : {})}>
+                          {loading ? (
+                            <View>
+                              <ActivityIndicator size="small" color="#fff" />
+                            </View>
+                          ) : (
+                            <>
+                              <ShoppingCar />
+                              <Text style={styles.buttonText}>Buy item</Text>
+                            </>
+                          )}
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{ ...styles.toCart }} onPress={() => addToCart(dish)} >
+                          { cartcurrent ?
+                            (<><Feather name="shopping-bag" size={22} color="#fff" /><Text style={{ ...styles.toCartText }}>{cartcurrent} time(s) in cart</Text></>) :
+                            (<><Feather name="shopping-bag" size={22} color="#fff" /><Text style={{ ...styles.toCartText }}>Add to cart </Text></>)
+                          }
+                        </TouchableOpacity>
                       </View>
                     </>
                   ) : (

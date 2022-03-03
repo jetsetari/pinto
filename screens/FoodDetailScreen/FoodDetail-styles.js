@@ -29,7 +29,7 @@ export const styles = StyleSheet.create({
   SubHeadingText:{
     color:"#ACC63C",
     fontSize: 18,
-    marginTop:40,
+    marginTop: 10,
     fontFamily: "TitilliumBold",
   },
   IngredientsText:{
@@ -88,7 +88,7 @@ export const styles = StyleSheet.create({
     left:10,
   },
   priceWrap: {
-    flexDirection: "row",
+    flexDirection: "column",
     justifyContent: "space-between",
     marginTop:20,
     width:"100%",
@@ -98,21 +98,24 @@ export const styles = StyleSheet.create({
   sizes_inner_wrap: {
     flexDirection: "column",
     width: width - 120,
+
   },
   price_inner_wrap: {
     flexDirection: "column",
+    alignSelf: 'flex-end',
+    marginLeft: 'auto',
+
   },
   price:{
     color: "#ffffff",
   },
   size_title: {
-    color: "#9D9595",
-    marginTop: 0,
-    fontSize: 16,
-    fontFamily: "TitilliumLight"
+    color: "#FFFFFF",
+    fontSize: 14,
+    fontFamily: "TitilliumBold"
   },
   getPromo: {
-    backgroundColor: "#ACC63C",
+    backgroundColor: "#018260",
     height: 55,
     borderRadius: 17,
     alignSelf: "center",
@@ -123,16 +126,22 @@ export const styles = StyleSheet.create({
     alignItems: "center",
   },
   toCart: {
-    backgroundColor: "#ACC63C",
-    height: 55,
+    backgroundColor: "#1A514D",
+    height: 50,
     borderRadius: 17,
     alignSelf: "center",
-    width: 130,
+    width: '100%',
     marginTop:10,
-    marginLeft: 8 + '%',
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
+    marginBottom:60
+  },
+  toCartText: {
+    fontSize: 16,
+    color: "#ffffff",
+    fontFamily: "TitilliumBold",
+    marginHorizontal: 20,
   },
   promo: {
     width: 105,
@@ -153,19 +162,58 @@ export const styles = StyleSheet.create({
     height: 70,
     borderRadius: 17,
     alignSelf: "center",
-    width: 150,
+    width: '100%',
     marginTop:10,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom:60
+    marginBottom:10
   },
   buttonText: {
     fontSize: 16,
     color: "#ffffff",
     fontFamily: "TitilliumBold",
-    marginLeft: 20,
+    marginHorizontal: 20,
   },
+
+  cart: {  
+    top: 70, 
+    right: 30, 
+    zIndex: 999999, 
+    position: 'absolute', 
+    width: 60,
+    height: 55,
+    flex: 1
+  },
+  cartlogo: {
+    backgroundColor: '#FFFFFF', 
+    borderRadius: 10000, 
+    width: 50,
+    height: 50,
+    paddingVertical: 13,
+    paddingHorizontal: 15,
+    marginLeft: 'auto'
+  },
+  cartvalue : {
+    position: 'absolute',
+    bottom: 0,
+    left: 5,
+    backgroundColor: '#ACC63C',
+    width: 20,
+    height: 20,
+    zIndex: 999999, 
+    borderRadius: 10000,
+    textAlign: 'center'
+  },
+  carttext : {
+    textAlign: 'center',
+    color: '#FFF',
+    fontSize:14,
+    fontWeight: "normal",
+    fontFamily: "TitilliumBold",
+  },
+
+
 });
 
 

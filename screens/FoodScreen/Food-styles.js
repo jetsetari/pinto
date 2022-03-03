@@ -17,6 +17,43 @@ export const styles = StyleSheet.create({
     marginTop: 40
   },
 
+  cart: {  
+    top: 230, 
+    right: 30, 
+    zIndex: 999999, 
+    position: 'absolute', 
+    width: 60,
+    height: 55,
+    flex: 1
+  },
+  cartlogo: {
+    backgroundColor: '#FFFFFF', 
+    borderRadius: 10000, 
+    width: 50,
+    height: 50,
+    paddingVertical: 13,
+    paddingHorizontal: 15,
+    marginLeft: 'auto'
+  },
+  cartvalue : {
+    position: 'absolute',
+    bottom: 0,
+    left: 5,
+    backgroundColor: '#ACC63C',
+    width: 20,
+    height: 20,
+    zIndex: 999999, 
+    borderRadius: 10000,
+    textAlign: 'center'
+  },
+  carttext : {
+    textAlign: 'center',
+    color: '#FFF',
+    fontSize:14,
+    fontWeight: "normal",
+    fontFamily: "TitilliumBold",
+  },
+
   activeTabStyle: {
     backgroundColor: "transparent",
   },
@@ -54,7 +91,8 @@ export const styles = StyleSheet.create({
   ScrollableTab:{
     backgroundColor:"transparent",
     borderBottomWidth:0,
-    maxWidth:"100%"
+    maxWidth:"100%",
+    marginTop: -40,
   },
   tabsContainerStyle:{
     paddingLeft: "7%",
