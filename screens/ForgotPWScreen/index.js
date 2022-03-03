@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, SafeAreaView, TouchableOpacity, KeyboardAvoidingView, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { View, Text, TextInput, Image, SafeAreaView, TouchableOpacity, KeyboardAvoidingView, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from "react-native";
 import "firebase/firestore";
 import * as firebase from "../../firebase";
 import { styles } from "./ForgotPW-styles";
@@ -53,7 +53,8 @@ function ForgotPWScreen({ route, navigation }) {
 
   return (
     <ScrollHeaderContainer navigation={navigation} backButton={route.params.previous_screen} title="Forgot Password">
-<StatusBar style="light" hidden={false} />
+      <Image style={{ width: 155, height: 190, marginTop: 100 } } source={require("../../assets/images/logo-full.png")} />
+        <StatusBar style="light" hidden={true} />
           {success ? (
             <View style={[styles.e_layout, globalStyles.containerLogo]}>
               <Text style={styles.pwreset}>Check your email to reset your password: {email}</Text>

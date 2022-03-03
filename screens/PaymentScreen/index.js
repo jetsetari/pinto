@@ -231,7 +231,7 @@ function PaymentScreen(props) {
             <Text style={styles.IngredientsText}>
               Machine: {props.route.params.machine[props.route.params.machine_index].name} ({props.route.params.machine[props.route.params.machine_index].machine_id})
             </Text>
-            <TouchableOpacity style={globalStyles.button} onPress={() => props.navigation.navigate("Shop")}>
+            <TouchableOpacity style={globalStyles.button} onPress={() => props.navigation.navigate("Food")}>
               {!loading ? <Text style={globalStyles.buttonText}>Go back</Text> : <ActivityIndicator size={"small"} color="#000" />}
             </TouchableOpacity>
           </View>

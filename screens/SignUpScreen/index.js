@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, TextInput, SafeAreaView, TouchableOpacity, KeyboardAvoidingView, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { View, Text, TextInput, SafeAreaView, TouchableOpacity, Image, KeyboardAvoidingView, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from "react-native";
 import "firebase/firestore";
 import * as firebase from "../../firebase";
 import { styles } from "./SignUp-styles";
@@ -59,7 +59,8 @@ function SignUpScreen(props) {
 
   return (
     <ScrollHeaderContainer navigation={props.navigation} backButton={props.route.params.previous_screen} title="Sign Up"  >
-       <StatusBar style="light" hidden={false} />
+       <StatusBar style="light" hidden={true} />
+        <Image style={{ width: 155, height: 190, marginTop: 100 } } source={require("../../assets/images/logo-full.png")} />
           <View style={[styles.e_layout, globalStyles.containerLogo]}>
             <TextInput autoCapitalize="words" autoCompleteType="name" style={globalStyles.inputText} placeholder="First name" placeholderTextColor="#B1B1B1" returnKeyType="next" textContentType="name" value={firstName} onChangeText={(firstName) => setFirstName(firstName)} />
             <TextInput autoCapitalize="words" autoCompleteType="name" style={globalStyles.inputText} placeholder="Last name" placeholderTextColor="#B1B1B1" returnKeyType="next" textContentType="name" value={lastName} onChangeText={(lastName) => setLastName(lastName)} />
