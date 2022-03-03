@@ -114,7 +114,6 @@ function FoodDetailScreen(props) {
         <View style={ styles.cartvalue }><Text style={ styles.carttext }>{ cart }</Text></View>
       </TouchableOpacity> ) : <></> }
 
-
       <SharedElement id={`item.${dish.id}.image_url`}>
         <CachedImage style={styles.image} source={{ uri: dish.picture }} resizeMode="cover" />
       </SharedElement>
