@@ -71,19 +71,12 @@ function PaymentScreen(props) {
   </head>
 
   <form id="checkoutForm">
-<<<<<<< HEAD
   <!--<form id="checkoutForm" method="POST" action="https://us-central1-pinto-new-gen.cloudfunctions.net/handlePaymentOmisePinto">--!>
     <input type="hidden" name="omiseToken" />
     <input type="hidden" name="omiseSource" />
     <input type="hidden" name="amount" value="${props.route.params.dishes !== undefined ? (
       moneyCount*100
     ) : (props.route.params.dish.price*100)}" />
-=======
-  <!--<form id="checkoutForm" method="POST" action="https://us-central1-pinto-new-gen.cloudfunctions.net/handlePaymentOmisePinto">-->
-    <input type="hidden" name="omiseToken" />
-    <input type="hidden" name="omiseSource" />
-    <input type="hidden" name="amount" value="${props.route.params.dish.price * 100}" />
->>>>>>> c1e740a90bc78820fb684e1344dad4eeab3e0acf
     <input type="hidden" name="return_uri" />
     <input type="hidden" name="currency" value="THB" />
   </form>
