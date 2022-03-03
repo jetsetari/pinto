@@ -15,6 +15,7 @@ import { connect } from "react-redux";
 import { Feather } from "@expo/vector-icons";
 
 function FoodScreen({ navigation, company }) {
+
   const weekDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
   const months = ["Jan.", "Feb.", "Mar.", "Apr.", "May", "June", "July", "Aug.", "Sep.", "Oct.", "Nov.", "Dec."];
   var _date_array = [];
@@ -33,6 +34,9 @@ function FoodScreen({ navigation, company }) {
   useEffect(() => {
     setLoading(true);
     getDishes();
+    getCartProducts(company.selectedCompany.user_id, (result) => {
+      setCart(result.length);
+    })
   }, []);
 
   useEffect(() => {
@@ -50,12 +54,6 @@ function FoodScreen({ navigation, company }) {
         console.log(result.promo);
         setPromo(result.promo);
       });
-  }, [company.selectedCompany]);
-
-  useEffect(() => {
-    getCartProducts(company.selectedCompany.user_id, (result) => {
-      setCart(result.length);
-    })
   }, [company.selectedCompany]);
 
   

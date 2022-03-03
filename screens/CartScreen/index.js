@@ -35,13 +35,14 @@ function CartScreen(props) {
   };
 
   useEffect(() => {
+
     getCart();
     let price = 0;
     products.map(function(element, index) { 
       price = price+parseFloat(element.price);
     });
     setTotalprice(price);
-  }, [products]);
+  }, []);
 
   const onRefresh = ()  => {
     setRefreshing(true);

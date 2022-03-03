@@ -120,7 +120,7 @@ function FoodDetailScreen(props) {
 
       <Animatable.View ref={buttonRef} animation="fadeIn" duration={600} delay={300} style={[StyleSheet.absoluteFillObject]}>
         <CloseBtn>
-          <TouchableOpacity onPress={() => props.navigation.goBack()}>
+          <TouchableOpacity onPress={() => props.navigation.navigate('Home')}>
             <Image source={require("../../assets/images/back.png")} />
           </TouchableOpacity>
         </CloseBtn>
