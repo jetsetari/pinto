@@ -26,9 +26,10 @@ function AccountScreen({ navigation, setSelectedCompany, company }) {
     doSignOut();
   }
   useEffect(() => {
-    getUser(company.user_id, (result) => {
-      setWallet(result.wallet);
-    })
+    company.user_id !== undefined &&
+      getUser(company.user_id, (result) => {
+        setWallet(result.wallet);
+      })
   }, [wallet])
 
   return (

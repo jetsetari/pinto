@@ -34,9 +34,10 @@ function FoodScreen({ navigation, company }) {
   useEffect(() => {
     setLoading(true);
     getDishes();
-    getCartProducts(company.selectedCompany.user_id, (result) => {
-      setCart(result.length);
-    })
+    company.selectedCompany.company_id !== undefined &&
+      getCartProducts(company.selectedCompany.user_id, (result) => {
+        setCart(result.length);
+      })
   }, []);
 
   useEffect(() => {
