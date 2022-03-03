@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, SafeAreaView, TouchableOpacity, KeyboardAvoidingView, ActivityIndicator, TouchableWithoutFeedback, Keyboard } from "react-native";
+import { View, Text, TextInput, SafeAreaView, TouchableOpacity, KeyboardAvoidingView, ActivityIndicator, TouchableWithoutFeedback, Keyboard, Image } from "react-native";
 import "firebase/firestore";
 import * as firebase from "../../firebase";
 import { styles } from "./SignIn-styles";
@@ -47,7 +47,9 @@ function SignInScreen({ navigation }) {
 
   return (
     <ScrollHeaderContainer title="Sign In">
-      <StatusBar style="light" hidden={false} />
+      <StatusBar style="light" hidden={true} />
+      <Image style={{ width: 155, height: 190, marginTop: 100 } } source={require("../../assets/images/logo-full.png")} />
+
       <View style={[styles.e_layout, globalStyles.containerLogo ]}>
         <TextInput autoCapitalize="none" keyboardType="email-address" autoCompleteType="email" style={globalStyles.inputText} placeholder="Email" placeholderTextColor="#B1B1B1" returnKeyType="next" keyboardType="email-address" textContentType="emailAddress" value={email} onChangeText={(email) => setEmail(email)} />
         <TextInput autoCapitalize="none" autoCompleteType="password" style={globalStyles.inputText} placeholder="Password" placeholderTextColor="#B1B1B1" returnKeyType="done" textContentType="newPassword" secureTextEntry={true} value={password} onChangeText={(password) => setPassword(password)} />
