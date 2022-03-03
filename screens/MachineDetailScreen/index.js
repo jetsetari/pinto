@@ -13,17 +13,90 @@ import { connect } from "react-redux";
 import { addEmployeesOrder, addOrderesDishToAisle } from "../../firebase/firestore/saveData";
 import CachedImage from "../../components/CachedImage";
 import { formatDate } from "../../functions/formatDate.js";
+import { getUser } from "../../firebase/firestore/getData.js";
+import { updateWalletAmount } from "../../firebase/firestore/updateData.js";
 
 function MachineDetail(props) {
   const [loading, setLoading] = useState(false);
   const [itemOrdered, setItemOrdered] = useState(false);
   const [machineIndex, setMachineIndex] = useState(0);
   const [machineIsFull, setMachineIsFull] = useState(false);
-  const buttonRef = useRef();
-  useEffect(() => {
-    
-  },  [])
+  const [wallet, setWallet] = useState(null);
+  const [moneyCount, setMoneyCount] = useState(null);
 
+  const buttonRef = useRef();
+
+  useEffect(() => {
+    getUser(props.company.selectedCompany.user_id, (result) => {
+      setWallet(result.wallet);
+    })
+
+    if (props.route.params.dishes !== undefined) {
+      let money = props.route.params.dishes.map(item => Number(item.price)).reduce((prev, next) => prev + next);
+      setMoneyCount(money);
+      console.log(money);
+    }else if (props.route.params.dish !== undefined) {
+      let money = props.route.params.dish.price;
+      setMoneyCount(money);
+    }
+  }, [])
+
+  function payWallet() {
+    setLoading(true);
+
+    if (wallet >= moneyCount) {
+
+      if (props.route.params.dishes !== undefined) {
+        let lastItem = props.route.params.dishes.length - 1;
+        props.route.params.dishes.forEach((dish, i) => {
+          addOrderesDishToAisle(props.company.selectedCompany.individual_mode, props.company.selectedCompany.type, props.company.selectedCompany.company_id, [props.route.params.machine], formatDate(Date.parse(dish.date)), dish, props.company.selectedCompany.user_id, 0, (result, idx, machine_index) => {
+            if (result === true) {
+              setLoading(false);
+              setMachineIndex(machine_index);
+
+              updateWalletAmount(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, (Number(wallet) - Number(moneyCount)), (callback) => {
+                setWallet(Number(wallet)-Number(moneyCount));
+              })
+
+              if(i === lastItem){
+                props.navigation.navigate("Orders", { date: formatDate(Date.parse(dish.date)), dishes: props.route.params.dishes, aisle: idx, machine: [props.route.params.machine], machine_index: machine_index, result: result });
+              }
+            } else {
+              setMachineIsFull(true);
+              if(i === lastItem){
+                props.navigation.navigate("Orders", { date: formatDate(Date.parse(dish.date)), dishes: props.route.params.dishes, aisle: idx, machine: [props.route.params.machine], machine_index: machine_index, result: result });
+              }
+            }
+          });
+        })
+        
+       } else {
+  
+          addOrderesDishToAisle(props.company.selectedCompany.individual_mode, props.company.selectedCompany.type, props.company.selectedCompany.company_id, [props.route.params.machine], formatDate(Date.parse(props.route.params.date)), props.route.params.dish, props.company.selectedCompany.user_id, 0, (result, idx, machine_index) => {
+            if (result === true) {
+              setLoading(false);
+              setMachineIndex(machine_index);
+
+              updateWalletAmount(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, (Number(wallet) - Number(moneyCount)), (callback) => {
+                setWallet(Number(wallet)-Number(moneyCount));
+              })
+
+              props.navigation.navigate("Orders", { dish: props.route.params.dish, aisle: idx, date: props.route.params.date, machine: [props.route.params.machine], machine_index: machine_index, result: result });
+            } else {
+              setMachineIsFull(true);
+            }
+          });
+       }
+
+    }else{
+      setWallet('Not enough in wallet');
+    }
+
+
+
+    
+
+  }
 
   function chooseDish() {
     setLoading(true);
@@ -129,8 +202,11 @@ function MachineDetail(props) {
                       <Text style={styles.description}>{formatDate(props.route.params.date)}</Text>
                     </>
                    }
+                  <TouchableOpacity style={[globalStyles.mainButton, {marginTop: 20}]} onPress={() => (!loading ? payWallet() : {})}>
+                    {!loading ? <Text style={globalStyles.mainButtonText}>{props.route.params.dishes !== undefined ? ('Pay dishes with wallet ' + wallet) : ('Pay dish with wallet ' + wallet)}</Text> : <ActivityIndicator size={"small"} color="#000" />}
+                  </TouchableOpacity>
                   <TouchableOpacity style={[globalStyles.mainButton, {marginTop: 20}]} onPress={() => (!loading ? chooseDish() : {})}>
-                    {!loading ? <Text style={globalStyles.mainButtonText}>{props.route.params.dishes !== undefined ? ('Add dishes to machine') : ('Add dish to machine')}</Text> : <ActivityIndicator size={"small"} color="#000" />}
+                    {!loading ? <Text style={globalStyles.mainButtonText}>{props.route.params.dishes !== undefined ? ('Pay dishes with card') : ('Pay dish with card')}</Text> : <ActivityIndicator size={"small"} color="#000" />}
                   </TouchableOpacity>
                 </View>
               </>
