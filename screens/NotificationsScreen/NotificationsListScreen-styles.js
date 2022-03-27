@@ -117,7 +117,6 @@ export const styles = StyleSheet.create({
   text: {
     color: "#ffffff",
     marginBottom: 5,
-    lineHeight: 20,
     fontFamily: "TitilliumRegular"
   },
   info_text: {

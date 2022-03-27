@@ -21,6 +21,9 @@ function TermsScreen(props) {
         <SafeAreaView style={globalStyles.container}>
           <View style={globalStyles.e_layout_container}>
             <View style={globalStyles.e_layout}>
+              <View style={[globalStyles.e_layout, { marginTop: 60}]}>
+                <Text style={globalStyles.h1}>Terms and conditions</Text>
+              </View>
               <H2 style={styles.SubHeadingText}>Agreement to Terms</H2>
               <Text style={styles.description}>
                 These Terms and Conditions constitute a legally binding agreement made between you, whether personally or on behalf of an entity (“you”) and [business entity name] (“we,” “us” or “our”), concerning your access to and use of the [website name.com] website as well as any other media form, media channel, mobile website or mobile application related, linked, or otherwise connected thereto (collectively, the “Site”). 

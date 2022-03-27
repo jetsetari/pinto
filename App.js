@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from "react";
-import { StatusBar, View } from "react-native";
+import { StatusBar } from "react-native";
 import Navigation from "./routes";
 import * as firebase from "./firebase/firebase";
 import Loading from "./components/Loading";
@@ -28,12 +28,9 @@ function App(props) {
   useMemo(() => {
     firebase.auth.onAuthStateChanged((user) => {
       if (user) {
-        // props.setUserData(user.uid);
-
         if (props.company.selectedCompany.new_user !== undefined && props.company.selectedCompany.new_user) {
           addNewUserToDB(user.uid, props.company.selectedCompany, (data) => {
             props.setSelectedCompany({ new_user: false, company_id: props.company.selectedCompany.company, user_id: user.uid, ...data });
-            
           });
         } else {
           getUser(user.uid, (result) => {
@@ -50,7 +47,7 @@ function App(props) {
 
   return fontsLoaded ? (
     <>
-          <StatusBar style="light" hidden={false} />
+      <StatusBar style="light" hidden={false} />
       {authUser !== null ? <Navigation authUser={authUser} /> : <Loading />}
     </>
   ) : <Loading/>;

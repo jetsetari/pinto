@@ -11,23 +11,32 @@ export const styles = StyleSheet.create({
   },
   HeadingText:{
     color:"#ffffff",
-    fontSize:28,
+    fontSize: 38,
     paddingLeft:0,
-    paddingTop: 55,
+    marginTop: 5,
+    paddingTop: 10,
     fontFamily: "TitilliumBold",
   },
   description:{
-    color:"#ffffff",
-    marginTop:10,
+    color:"#D1F1EF",
+    marginTop:0,
     fontFamily: "TitilliumLight",
+    fontSize: 18,
+    lineHeight: 25
+  },
+  descriptionname: {
+    color:"#ffffff",
+    marginTop:0,
+    fontFamily: "TitilliumBold",
     fontSize: 18,
     lineHeight: 25
   },
   SubHeadingText:{
     color:"#ACC63C",
-    fontSize: 18,
-    marginTop:40,
+    fontSize: 22,
+    marginTop:20,
     fontFamily: "TitilliumBold",
+    marginBottom: 10
   },
   IngredientsText:{
     color:"#ffffff",
@@ -90,4 +99,92 @@ export const styles = StyleSheet.create({
     top:17,
     left:10,
   },
+  item : {
+    backgroundColor: '#1F504C',
+    width: '100%',
+    borderRadius: 9,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 10
+  },
+  itemcontent: {
+    borderRadius: 9,
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#112524'
+  },
+  textWrap: {
+    flex: 1,
+    flexDirection: 'row',
+    flexWrap: 'wrap', 
+    width: '100%',
+    paddingRight: 20
+  },
+  productTitle: {
+    fontSize:14,
+    color:"#FFF",
+    fontWeight: "normal",
+    fontFamily: "TitilliumBold",
+    flexWrap: 'wrap',
+    lineHeight: 16,
+    width: '100%',
+    marginTop: 7
+  },
+  productCount: {
+    fontFamily: "TitilliumBold",
+    color: "#FFF"
+  },
+  countWrap: {
+    backgroundColor: '#1F504C',
+    width: 40,
+    height: 40,
+    borderRadius: 8,
+    textAlign: 'center',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 20
+  },
+  productDate: {
+    fontSize:12,
+    color:"#FFF",
+    fontWeight: "normal",
+    fontFamily: "TitilliumRegular",
+    flexWrap: 'wrap'
+  },
+  listImage: {
+    width: 60,
+    height: 60,
+    backgroundColor:"#006443",
+    paddingTop:0,
+    paddingLeft: 0,
+    paddingRight:0,
+    paddingLeft:0,
+    borderTopLeftRadius:9,
+    borderBottomLeftRadius:9,
+    marginRight: 20
+  },
+  price_inner_wrap: {
+    flexDirection: "column",
+    alignSelf: 'flex-end',
+    marginLeft: 'auto',
+  },
+  price_inner_wrap: {
+    flexDirection: "column",
+    alignSelf: 'flex-end',
+    marginLeft: 'auto',
+    marginTop: -10
+  },
+  price:{
+    color: "#ffffff",
+  },
+  walletnote: {
+    marginLeft: 'auto',
+    color: "#ffffff",
+    fontFamily: "TitilliumLight",
+    fontSize: 13,
+    marginTop: 5,
+    marginRight: 5
+  }
 });

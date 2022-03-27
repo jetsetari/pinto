@@ -10,9 +10,9 @@ import * as Animatable from "react-native-animatable";
 import { Feather } from "@expo/vector-icons";
 //Redux
 import { connect } from "react-redux";
-import { addEmployeesOrder, addOrderesDishToAisle, addProductToCart } from "../../firebase/firestore/saveData";
+import { addEmployeesOrder, addOrderesDishToAisle, addProductToCart, removeOldProducts, addMultipleProducts } from "../../firebase/firestore/saveData";
 import CachedImage from "../../components/CachedImage";
-import { findPromo, getCartProducts } from "../../firebase/firestore/getData";
+import { findPromo, getCartProducts, getCartProductsOnce } from "../../firebase/firestore/getData";
 
 function FoodDetailScreen(props) {
   const [machineAisles, setMachineAisles] = useState([]);
@@ -28,7 +28,6 @@ function FoodDetailScreen(props) {
   const dish = props.route.params.dish;
   const [cart, setCart] = useState(0);
   const [cartcurrent, setCartcurrent] = useState(0);
-
 
   function formatDate(date) {
     var d = new Date(date),
@@ -72,24 +71,60 @@ function FoodDetailScreen(props) {
   }
 
   function setCartProducts() {
-    getCartProducts(props.company.selectedCompany.user_id, (result) => {
+    getCartProductsOnce(props.company.selectedCompany.user_id, (result) => {
       let _date = formatDate(props.route.params.date);
       let _dish_id = dish.id;
+      console.log(result, _dish_id);
       let _filter = result.filter(function (el){ return el.food_id == _dish_id && el.date <= _date });
-      setCartcurrent(_filter.length);
+      setCartcurrent(_filter);
       setCart(result.length);
     })
   }
+  function clone(obj) {
+      if(obj == null || typeof(obj) != 'object')
+          return obj;    
+      var temp = new obj.constructor(); 
+      for(var key in obj)
+          temp[key] = clone(obj[key]);    
+      return temp;
+  }
 
-  function addToCart(product) {
-    addProductToCart(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, product, formatDate(Date.parse(props.route.params.date)), () => {
-      setCartProducts();
-    })
+  function changeCartCurrent(product, type = 'plus'){
+    let _cartcurrent = clone(cartcurrent);
+    product.date = formatDate(props.route.params.date);
+    product.food_id = props.route.params.dish.id;
+    if(type == 'min'){
+      _cartcurrent = _cartcurrent.slice(0, -1);
+      setCartcurrent(_cartcurrent);
+    } else {
+      _cartcurrent.push(product);
+      setCartcurrent(_cartcurrent);
+    }
+  }
+
+  function addToCart() {
+    if(cartcurrent == 0){
+      alert('No products');
+    } else {
+      console.log(cartcurrent, props.route.params.date);
+      removeOldProducts(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, cartcurrent[0].food_id, () => {
+        addMultipleProducts(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, cartcurrent, () => {
+          props.navigation.navigate('Home');
+        })
+      });
+    }
+    
+    
+
+    //props.navigation.navigate('Home');
+    // addProductToCart(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, product, formatDate(Date.parse(props.route.params.date)), () => {
+    //   setCartProducts();
+    // })
   }
 
   useEffect(() => {
     setCartProducts();
-  }, [props.company.selectedCompany]);
+  }, []);
 
   function getPromoCode() {
     setPromoLoading(true);
@@ -107,16 +142,19 @@ function FoodDetailScreen(props) {
     <Container style={globalStyles.scrollView}>
     <StatusBar style="light" hidden={false} />
       { cart ? (
-      <TouchableOpacity style={ styles.cart } onPress={() => props.navigation.navigate("Cart") }>
+      <TouchableOpacity style={ styles.cart } onPress={() => props.navigation.navigate("Cart", { dish: dish }) }>
         <View style={styles.cartlogo}>
-          <Feather name="shopping-bag" size={22} color="#000" />
+          <Feather name="shopping-cart" size={22} color="#000" />
         </View>
         <View style={ styles.cartvalue }><Text style={ styles.carttext }>{ cart }</Text></View>
       </TouchableOpacity> ) : <></> }
 
-      <SharedElement id={`item.${dish.id}.image_url`}>
-        <CachedImage style={styles.image} source={{ uri: dish.picture }} resizeMode="cover" />
-      </SharedElement>
+      <View style={styles.bannerWrapper}>
+        <SharedElement id={`item.${dish.id}.image_url`}>
+          <CachedImage style={styles.image} source={{ uri: dish.picture }} resizeMode="cover" />
+        </SharedElement>
+
+      </View>
 
       <Animatable.View ref={buttonRef} animation="fadeIn" duration={600} delay={300} style={[StyleSheet.absoluteFillObject]}>
         <CloseBtn>
@@ -161,14 +199,13 @@ function FoodDetailScreen(props) {
                       <View style={styles.priceWrap}>
                         <View style={{ flexDirection: "row" }}>
                           <View style={{ width: '100%', flexDirection: "row", marginTop: 10}}>
-                            <TextInput editable={!loading} textAlign={"center"} style={styles.promo} placeholder="Promo code" placeholderTextColor="#FFFFFF" returnKeyType="done" value={promo} onChangeText={(e) => setPromo(e)} />
+                            <TextInput editable={!loading} textAlign={"center"} style={styles.promo} placeholder="Promo code" placeholderTextColor="#B0D0CE" returnKeyType="done" value={promo} onChangeText={(e) => setPromo(e)} />
                             <TouchableOpacity style={{ ...styles.getPromo }} onPress={() => getPromoCode()}>
                               {promoLoading ? <ActivityIndicator size="small" color="#fff" /> : <Feather name="chevrons-right" size={22} color="#fff" />}
                             </TouchableOpacity>
                           </View>
                           <View style={styles.price_inner_wrap}>
-                            <H3 style={styles.size_title}>Price</H3>
-                            <View style={{ marginTop: 10, flexDirection: "row", alignItems: "center" }}>
+                            <View style={{ flexDirection: "row", alignItems: "center", paddingBottom: 5 }}>
                               <PriceSymbol />
                               <Price>{dish.price - found_promo}</Price>
                             </View>
@@ -177,7 +214,7 @@ function FoodDetailScreen(props) {
                       </View>
 
                       <View style={styles.priceWrap}>
-                        <TouchableOpacity style={styles.button} onPress={() => (!loading ? chooseDish() : {})}>
+                        {/*<TouchableOpacity style={styles.button} onPress={() => (!loading ? chooseDish() : {})}>
                           {loading ? (
                             <View>
                               <ActivityIndicator size="small" color="#fff" />
@@ -188,14 +225,21 @@ function FoodDetailScreen(props) {
                               <Text style={styles.buttonText}>Buy item</Text>
                             </>
                           )}
-                        </TouchableOpacity>
-                        <TouchableOpacity style={{ ...styles.toCart }} onPress={() => addToCart(dish)} >
-                          { cartcurrent ?
-                            (<><Feather name="shopping-bag" size={22} color="#fff" /><Text style={{ ...styles.toCartText }}>{cartcurrent} time(s) in cart</Text></>) :
-                            (<><Feather name="shopping-bag" size={22} color="#fff" /><Text style={{ ...styles.toCartText }}>Add to cart </Text></>)
-                          }
-                        </TouchableOpacity>
+                        </TouchableOpacity>*/}
+                        <View style={{ flex: 1, flexDirection: 'row', alignSelf: 'center' }}>
+                          <TouchableOpacity style={{ ...styles.editCart }} onPress={() => changeCartCurrent(dish, 'min')} >
+                            <><Feather name="minus" size={18} color="#fff" /></>
+                          </TouchableOpacity>
+                          <View style={{ ...styles.cartAmount }}><Text style={{ ...styles.toCartText }}>{cartcurrent.length}</Text></View>
+                          <TouchableOpacity style={{ ...styles.editCart }} onPress={() => changeCartCurrent(dish, 'plus')} >
+                            <><Feather name="plus" size={18} color="#fff" /></>
+                          </TouchableOpacity>
+                        </View>
                       </View>
+                      <TouchableOpacity style={styles.button} onPress={() => addToCart() }>
+                        <ShoppingCar />
+                        <Text style={styles.buttonText}>Add to cart</Text>
+                      </TouchableOpacity>
                     </>
                   ) : (
                     <TouchableOpacity style={globalStyles.mainButton} onPress={() => (!loading ? chooseDish() : {})}>
@@ -219,11 +263,12 @@ const mapStateToProps = (state) => ({
 FoodDetailScreen.sharedElements = (route) => {
   const { dish } = route.params;
 
+
   return [
     {
       id: `item.${dish.id}.image_url`,
       animation: "move",
-      resize: "clip"
+      resize: "none"
     },
     {
       id: `item.${dish.id}.title`,

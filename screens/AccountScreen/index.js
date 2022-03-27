@@ -14,7 +14,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import ScrollHeaderContainer from "../../components/ScrollHeaderContainer";
 import CachedImage from "../../components/CachedImage";
-import { getUser } from "../../firebase/firestore/getData";
+import { getUser, getWallet } from "../../firebase/firestore/getData";
 
 function AccountScreen({ navigation, setSelectedCompany, company }) {
   const [wallet, setWallet] = useState(null);
@@ -27,7 +27,7 @@ function AccountScreen({ navigation, setSelectedCompany, company }) {
   }
   useEffect(() => {
     company.user_id !== undefined &&
-      getUser(company.user_id, (result) => {
+      getWallet(company.user_id, (result) => {
         setWallet(result.wallet);
       })
   }, [wallet])
@@ -35,7 +35,7 @@ function AccountScreen({ navigation, setSelectedCompany, company }) {
   return (
     <ScrollHeaderContainer title="Account">
       <>
-        <View style={globalStyles.e_layout}>
+        <View style={[globalStyles.e_layout, { marginTop: 80}]}>
           <Text style={styles.h1}>{company.individual_mode ? "Individual mode" : "Company mode"}</Text>
         </View>
         <View style={(globalStyles.e_layout, styles.company_wrapper)}>
@@ -102,15 +102,15 @@ function AccountScreen({ navigation, setSelectedCompany, company }) {
         </TouchableOpacity>
 
         <View style={{width: '100%',marginBottom: 0, ...globalStyles.e_layout, marginTop: 0}}>
-          <TouchableOpacity style={{ width: '100%', ...globalStyles.mainLineWhiteButton}} onPress={() => navigation.navigate("Wallet") }>
+          <View style={{ width: '100%', ...globalStyles.mainLineWhiteButton}} onPress={() => navigation.navigate("Wallet") }>
             <View style={styles.icon}>
               <Ionicons name="card-outline" size={22} color={"#ffffff"} />
             </View>
             <Text style={[globalStyles.mainButtonText, styles.btnText, { marginLeft: 10, lineHeight: 35}]}> Wallet {"\n"}<Text style={{ fontSize: 30, fontFamily: "TitilliumLight" }}>{ wallet } bth</Text></Text>
-            <View style={{marginLeft: 'auto', marginRight: 20, width: 100, ...globalStyles.mainLineButton}}>
+            {/*<View style={{marginLeft: 'auto', marginRight: 20, width: 100, ...globalStyles.mainLineButton}}>
               <Text style={globalStyles.mainLineButtonText}>Add credit</Text>
-            </View>
-          </TouchableOpacity>
+            </View>*/}
+          </View>
         </View>
 
         <View style={{marginBottom: 60, ...globalStyles.e_layout, marginTop: 20}}>

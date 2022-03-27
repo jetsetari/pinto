@@ -71,38 +71,69 @@ export const getCompanyById = (id, callback) => {
 	});
 };
 
+
 export const getUser = (uid, callback) => {
 	var userRef = db.collection("users").doc(uid);
-	userRef.get().then(function (doc) {
-        if(doc.exists){
-            db.collection("companies").doc(doc.data().company_id).get().then(function (companyDoc) {
-              if(companyDoc.exists){
-                db.collection("companies").doc(doc.data().company_id).collection('clients').doc(uid).get().then(function (walletDoc) {
-                  let data = {...doc.data(), ...companyDoc.data()}; data.user_id = doc.id; data.wallet = walletDoc.data().wallet;
-                  callback(data);
-                });
-              }});  
-            }})
+	userRef.onSnapshot(function (doc) {
+    console.log(doc.data());
+  if(doc.exists){
+      db.collection("companies").doc(doc.data().company_id).get().then(function (companyDoc) {
+        if(companyDoc.exists){
+          db.collection("companies").doc(doc.data().company_id).collection('clients').doc(uid).get().then(function (walletDoc) {
+            let data = {...doc.data(), ...companyDoc.data()}; data.user_id = doc.id; data.wallet = walletDoc.data().wallet;
+            callback(data);
+          });
+        }});  
+      }})
 };
 
+export const getWallet = (uid, callback) => {
+  db.collection("companies").doc("VSdGBmehp16UYYXviAqc").collection('clients').doc(uid).onSnapshot(function (walletDoc) {
+    callback(walletDoc.data());
+  });
+}
+
 export const getCartProducts = (uid, callback) => {
-	var userRef = db.collection("users").doc(uid);
-	userRef.get().then(function (doc) {
-        if(doc.exists){
-            db.collection("companies").doc(doc.data().company_id).get().then(function (companyDoc) {
-              if(companyDoc.exists){
-                db.collection("companies").doc(doc.data().company_id).collection('clients').doc(uid).collection("cart").get().then(function (querySnapshot) {
-                  let data = [];
-                  querySnapshot.forEach(function (cartDoc) {
-                    let _push = cartDoc.data(); 
-                    _push.food_id = _push.id;
-                    _push.id = cartDoc.id;
-                    data.push(_push);
-                  });
-                  callback(data);
-                });
-              }});  
-            }})
+  db.collection("companies").doc("VSdGBmehp16UYYXviAqc").collection('clients').doc(uid).collection("cart").onSnapshot(function (querySnapshot) {
+    let data = [];
+    querySnapshot.forEach(function (cartDoc) {
+      let _push = cartDoc.data(); 
+      _push.food_id = _push.id;
+      _push.id = cartDoc.id;
+      data.push(_push);
+    });
+    callback(data);
+  });
+	// var userRef = db.collection("users").doc(uid);
+	// userRef.get().then(function (doc) {
+ //        if(doc.exists){
+ //            db.collection("companies").doc(doc.data().company_id).get().then(function (companyDoc) {
+ //              if(companyDoc.exists){
+ //                db.collection("companies").doc(doc.data().company_id).collection('clients').doc(uid).collection("cart").get().then(function (querySnapshot) {
+ //                  let data = [];
+ //                  querySnapshot.forEach(function (cartDoc) {
+ //                    let _push = cartDoc.data(); 
+ //                    _push.food_id = _push.id;
+ //                    _push.id = cartDoc.id;
+ //                    data.push(_push);
+ //                  });
+ //                  callback(data);
+ //                });
+ //              }});  
+ //            }})
+};
+
+export const getCartProductsOnce = (uid, callback) => {
+  db.collection("companies").doc("VSdGBmehp16UYYXviAqc").collection('clients').doc(uid).collection("cart").get().then(function (querySnapshot) {
+    let data = [];
+    querySnapshot.forEach(function (cartDoc) {
+      let _push = cartDoc.data();
+      _push.food_id = (_push.food_id) ? _push.food_id : _push.id;
+      _push.id = cartDoc.id;
+      data.push(_push);
+    });
+    callback(data);
+  });
 };
 
 export const getMachineDishesByDate = (company_id, machine_id, date, callback) => {
@@ -131,6 +162,24 @@ export const getMachines = (company_id, callback) => {
         callback(data);
 	});
 };
+
+export function getArticles(company_id, callback) {
+  db.collection("companies")
+    .doc(company_id)
+    .collection("news")
+    .where("active", "==", true)
+    .orderBy("created")
+    .get()
+    .then(function (querySnapshot) {
+      if (querySnapshot.size <= 0) return callback(false);
+      callback(
+        querySnapshot.docs.map((doc) => {
+          return { ...doc.data(), id: doc.id };
+        })
+      );
+    });
+}
+
 
 // export const getAllOrders = (date, callback) => {
 //   db.collection("companies").get().then(async (querySnapshot) => {

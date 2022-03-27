@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, RefreshControl } from "react-native";
+import { View, RefreshControl, Text } from "react-native";
 import ScrollHeaderContainer from "../../components/ScrollHeaderContainer";
 import { getEmployeeOrders } from "../../firebase/firestore/getData";
 
@@ -34,9 +34,13 @@ function OrdersScreen(props) {
 
   return (
     <ScrollHeaderContainer title="Orders" backButton="Account" navigation={props.navigation} refreshEnabled={true} onRefresh={() => onRefresh()} refreshing={refreshing}>
-       <StatusBar style="light" hidden={false} />
+      
+      <StatusBar style="light" hidden={false} />
       <View style={globalStyles.e_layout}>
-      <OrderedFood dishes={loading ? "loading" : orders} />
+        <View style={[globalStyles.e_layout, { marginTop: 40}]}>
+          <Text style={globalStyles.h1}>Order history</Text>
+        </View>
+        <OrderedFood dishes={loading ? "loading" : orders} />
       </View>
     </ScrollHeaderContainer>
   );

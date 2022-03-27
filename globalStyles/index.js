@@ -15,6 +15,20 @@ export const globalStyles = StyleSheet.create({
   containerLogo: {
     marginTop: 40
   },
+  h2: {
+    color: "#ADC63A",
+    fontSize:25,
+    textAlign: "left",
+    marginTop:20,
+    fontFamily: "TitilliumRegular",
+  },
+  h1: {
+    color: "#FFF",
+    fontSize:32,
+    textAlign: "left",
+    marginTop:20,
+    fontFamily: "TitilliumBold",
+  },
   accountlistitem: {
     height: 50,
     alignSelf: "stretch",

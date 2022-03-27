@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
   },
   header:{
     backgroundColor: "#123835",
-    height:40,
+    height:50,
     paddingLeft:0,
     paddingRight: 0,
     borderBottomWidth:0,
@@ -33,12 +33,13 @@ export const styles = StyleSheet.create({
     alignItems: "flex-start"
   },
   e_layout_small_title: {
-    width: '86%',
+    width: '100%',
     marginTop: 15,
-    maxWidth:450,
+    //maxWidth:450,
     flexDirection:"row",
     justifyContent: "center",
     alignItems: "flex-start",
+    height: 150,
     top:-4
   },
   smallTitles:{

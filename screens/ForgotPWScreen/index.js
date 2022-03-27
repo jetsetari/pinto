@@ -8,6 +8,8 @@ import { doPasswordReset } from "../../firebase/auth";
 import { StatusBar } from "expo-status-bar";
 import ScrollHeaderContainer from "../../components/ScrollHeaderContainer";
 
+import { Feather } from "@expo/vector-icons";
+
 function ForgotPWScreen({ route, navigation }) {
   const [email, setEmail] = useState(route.params.email);
   const [errorMessage, setErrorMessage] = useState("");
@@ -53,6 +55,9 @@ function ForgotPWScreen({ route, navigation }) {
 
   return (
     <ScrollHeaderContainer navigation={navigation} backButton={route.params.previous_screen} title="Forgot Password">
+      <TouchableOpacity style={globalStyles.backButton} onPress={ () => navigation.navigate("Sign In", { previous_screen: "Forgot Password" }) }>
+        <Feather name="chevron-left" size={20} color="#FFF" />
+      </TouchableOpacity>
       <Image style={{ width: 155, height: 190, marginTop: 100 } } source={require("../../assets/images/logo-full.png")} />
         <StatusBar style="light" hidden={true} />
           {success ? (

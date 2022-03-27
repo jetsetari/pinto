@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Text, SafeAreaView, Button, View, TouchableOpacity, TextInput } from "react-native";
+import { Text, SafeAreaView, View, TouchableOpacity, TextInput } from "react-native";
 import ScrollHeaderContainer from "../../components/ScrollHeaderContainer";
 import { StatusBar } from "expo-status-bar";
 import { setSelectedCompany } from "../../redux/actions/selectedCompany-actions";
@@ -28,14 +28,13 @@ function WalletScreen(props) {
     updateWalletAmount(props.company.selectedCompany.company_id, props.company.selectedCompany.user_id, props.company.selectedCompany.wallet + amount, (callback) => {
       getUser(props.company.selectedCompany.user_id, (result) => {
         setWallet(result.wallet);
-        console.log(result);
       });
     })
   }
 
   return (
     <ScrollHeaderContainer title="Wallet" backButton="Account" navigation={props.navigation}>
-      <StatusBar hidden={true} style="light" />
+      <StatusBar hidden={false} style="light" />
         <SafeAreaView style={{ flexDirection: 'column', width: "100%", marginTop: 70, alignItems: 'center' }}>
           <View style={globalStyles.e_layout}>
 

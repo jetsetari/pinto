@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Text, TouchableOpacity, Platform, Alert, Linking, ActivityIndicator } from "react-native";
+import { Dimensions, Text, TouchableOpacity, Platform, Alert, Linking, ActivityIndicator, Image } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { Container, Header, Left, View, Right, Icon, Title } from "native-base";
 import { styles } from "./PickUp-styles";
@@ -13,6 +13,7 @@ import LottieView from 'lottie-react-native';
 import { connect } from "react-redux";
 import { formatDate } from "../../functions/formatDate";
 import { StatusBar } from "expo-status-bar";
+
 
 function PickUpScreen(props) {
   const [hasPermission, setHasPermission] = useState(null);
@@ -79,7 +80,8 @@ function PickUpScreen(props) {
   }
 
   return (
-    <HeaderContainer title="Pick up food">
+    <HeaderContainer title="Pick up food" back={true} navigation={props.navigation}>
+      
        <StatusBar style="light" hidden={false} />
               {wrongQrCode !== "" && (
           <View style={styles.wrongQrCode}>
@@ -87,7 +89,7 @@ function PickUpScreen(props) {
             <Text style={styles.wrongQrCodeText}>{wrongQrCode}</Text>
           </View>
         )}
-      <BarCodeScanner onBarCodeScanned={scanned ? undefined : handleBarCodeScanned} style={styles.camera} />
+      <BarCodeScanner onBarCodeScanned={scanned ? undefined : handleBarCodeScanned} style={[styles.camera]} />
       <View style={globalStyles.e_layout}>
 
 
@@ -104,7 +106,7 @@ function PickUpScreen(props) {
             ) : (
               <View style={{ textAlign: "center", justifyContent: 'center', alignItems: 'center', }}>
                 <LottieView source={require('./animation.json')} style={{ width: 100, textAlign:"center", justifyContent: "center", alignItems: "center", }} autoPlay loop />
-                <Text style={styles.scanText}>Scan QR code on Pinto machine to pick up your food.</Text>
+                <Text style={styles.scanText}>Scan QR code on Pinto machine {"\n"}to pick up your food.</Text>
               </View>
             )}
           </>

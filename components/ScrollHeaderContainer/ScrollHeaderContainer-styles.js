@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
   container:{
     flex: 1,
     backgroundColor: main_green,
+    height: '100%'
   },
   headerText:{
     color:"#ffffff",
@@ -111,6 +112,7 @@ backIcon: {
     flex: 1,
     flexDirection: 'column',
     alignItems: 'center',
-    paddingBottom:40
+    paddingBottom:0,
+    height: '100%'
   },
 });

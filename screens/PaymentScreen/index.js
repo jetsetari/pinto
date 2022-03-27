@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { WebView } from "react-native-webview";
 import { View, Text, Image, TouchableOpacity, ActivityIndicator } from "react-native";
-import { globalStyles } from "../../globalStyles";
+import { globalStyles } from "../../globalStyles/styles.js";
 import { styles } from "./Payment-styles";
 import { Container, Content, H1, H3, H2 } from "native-base";
 //Redux
@@ -10,7 +10,7 @@ import { handlePaymentOmise } from "../../firebase/functions";
 import { updateOrderPayment } from "../../firebase/firestore/updateData";
 import { addEmployeesOrder } from "../../firebase/firestore/saveData";
 import { deleteFromCart, deletePendingOrder } from "../../firebase/firestore/deleteData";
-
+import CachedImage from "../../components/CachedImage";
 import Loading from "../../components/Loading";
 
 function PaymentScreen(props) {
@@ -208,16 +208,32 @@ function PaymentScreen(props) {
               }}
               />
             }
-          <View style={(globalStyles.e_layout, styles.orderSuccess)}>
-            <H1 style={styles.HeadingText}>Order placement succesfull.</H1>
-            <H2 style={styles.SubHeadingText}>Your order:</H2>
+          <View style={(globalStyles.e_layout)}>
+            <H1 style={styles.HeadingText}>Order succesfull</H1>
+
+            <H2 style={styles.SubHeadingText}>Location</H2>
+            <Text style={styles.descriptionname}>{props.route.params.machine[props.route.params.machine_index].name}</Text>
+            <Text style={styles.description}>{props.route.params.machine[props.route.params.machine_index].machine_id}</Text>
+
+
+            <H2 style={styles.SubHeadingText}>Dishes</H2>
             
             {
               props.route.params.dishes !==  undefined ? (
-                props.route.params.dishes.map((dish) => (
+                props.route.params.dishes.map((dish, key) => (
                   <>
-                    <Text style={styles.IngredientsText}>Dish: {dish.title}</Text>
-                    <Text style={styles.IngredientsText}>Date: {formatDate(Date.parse(dish.date))}</Text>
+                    <View key={key} style={ styles.item }>
+                      <View style={ styles.itemcontent }>
+                        <CachedImage style={styles.listImage} source={{ uri: dish?.picture }} resizeMode="cover" />
+                        <View style={ styles.textWrap }>
+                          <Text style={ styles.productTitle }>{dish?.title}xx</Text>
+                          <Text style={ styles.productDate }>{dish?.date}</Text>
+                        </View>
+                        <View style={ styles.countWrap }>
+                          <Text style={ styles.productCount }>{dish?.count}</Text>
+                        </View>
+                      </View>
+                    </View>
                   </>
                 ))
               ):(
@@ -227,13 +243,15 @@ function PaymentScreen(props) {
                 </>
               )
             }
-            
-            <Text style={styles.IngredientsText}>
-              Machine: {props.route.params.machine[props.route.params.machine_index].name} ({props.route.params.machine[props.route.params.machine_index].machine_id})
-            </Text>
-            <TouchableOpacity style={globalStyles.button} onPress={() => props.navigation.navigate("Food")}>
-              {!loading ? <Text style={globalStyles.buttonText}>Go back</Text> : <ActivityIndicator size={"small"} color="#000" />}
+            <TouchableOpacity style={[globalStyles.mainButton, {marginTop: 20, height: 60, paddingLeft: 20}]} onPress={() => props.navigation.navigate("PickUp")}>
+              <Image style={{ width: 30, height: 30, resizeMode: 'contain', marginRight: 10 }} source={require('./images/qr.png')}/>
+              <Text style={globalStyles.mainButtonText}>Pick up food</Text>
             </TouchableOpacity>
+
+            <TouchableOpacity style={[globalStyles.mainButton, {marginTop: 20, height: 50, paddingLeft: 20, backgroundColor: '#1F504C'}]} onPress={() => props.navigation.navigate("Food")}>
+              <Text style={[globalStyles.mainButtonText, { color: '#6FA09D' }]}>Go back to home</Text>
+            </TouchableOpacity>
+            
           </View>
             </View>
 

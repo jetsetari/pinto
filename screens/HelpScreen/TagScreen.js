@@ -38,33 +38,36 @@ function TagScreen({ tag, questions, navigation, company, ...props }) {
   }
 
   return (
-      <Content>
-
-          <View style={globalStyles.e_layout_container}>
-            <View style={globalStyles.e_layout}>
-              {showQuestions ? (
-                showQuestions.map((question, idx) => (
-                  <TouchableOpacity
-                    key={idx}
-                    style={styles.accountlistitemFirst}
-                    onPress={() => {
-                      _nav(question);
-                    }}
-                  >
-                    <View style={(globalStyles.e_layout, globalStyles.accountlistitem_content)}>
-                      <Text style={globalStyles.mainButtonText}>{question.name}</Text>
-                      <Ionicons name="arrow-forward" size={22} color={"#ffffff"} />
-                    </View>
-                  </TouchableOpacity>
-                ))                    
-              ):(
-                <View style={(globalStyles.e_layout, globalStyles.accountlistitem_content)}>
-                  <Text style={globalStyles.mainButtonText}>No items in this section</Text>
-                </View>
-              )}
-            </View>
-          </View>
-      </Content>
+    <ScrollHeaderContainer backButton={"Home"} navigation={navigation} title="Notifications">
+      <StatusBar style="light"  hidden={false} />
+      <View style={[globalStyles.e_layout, { marginTop: 20 }]}>
+        <View style={[globalStyles.e_layout, { marginTop: 80, marginBottom: 0}]}>
+          <Text style={globalStyles.h1}>Help</Text>
+        </View>
+        <View style={{ width: '100%' }}>
+          {showQuestions ? (
+              showQuestions.map((question, idx) => (
+                <TouchableOpacity
+                  key={idx}
+                  style={styles.accountlistitemFirst}
+                  onPress={() => {
+                    _nav(question);
+                  }}
+                >
+                  <View style={(globalStyles.e_layout, globalStyles.accountlistitem_content)}>
+                    <Text style={globalStyles.mainButtonText}>{question.name}</Text>
+                    <Ionicons name="arrow-forward" size={22} color={"#ffffff"} />
+                  </View>
+                </TouchableOpacity>
+              ))                    
+            ):(
+              <View style={(globalStyles.e_layout, globalStyles.accountlistitem_content)}>
+                <Text style={globalStyles.mainButtonText}>No items in this section</Text>
+              </View>
+            )}
+        </View>
+      </View>
+    </ScrollHeaderContainer>
   );
 }
 

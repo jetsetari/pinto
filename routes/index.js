@@ -3,6 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import HomeScreen from "../screens/HomeScreen";
 import FoodScreen from "../screens/FoodScreen";
 import PickUpScreen from "../screens/PickUpScreen";
 import ChooseOrderScreen from "../screens/ChooseOrderScreen";
@@ -32,6 +33,7 @@ const HomeStack = createStackNavigator();
 const SettingsStack = createStackNavigator();
 const RootStack = createStackNavigator();
 const NewStack = createSharedElementStackNavigator();
+const MachineStack = createSharedElementStackNavigator();
 
 function HomeStackScreen() {
   return (
@@ -40,6 +42,7 @@ function HomeStackScreen() {
         headerShown: false
       }}
     >
+      <NewStack.Screen name="Main" component={HomeScreen} />
       <NewStack.Screen name="Home" component={FoodScreen} />
       <NewStack.Screen name="Cart" component={CartScreen} />
       <NewStack.Screen name="Details" component={FoodDetailScreen} />
@@ -49,14 +52,14 @@ function HomeStackScreen() {
 
 function MachineStackScreen(props) {
   return (
-    <NewStack.Navigator
+    <MachineStack.Navigator
       screenOptions={{
         headerShown: false
       }}
     >
-      <NewStack.Screen routeName="Map" name="Map" initialParams={props.route.params} component={MachineMapScreen} />
-      <NewStack.Screen name="MachineDetail" initialParams={props.route.params} component={MachineDetailScreen} />
-    </NewStack.Navigator>
+      <MachineStack.Screen routeName="Map" name="Map" initialParams={props.route.params} component={MachineMapScreen} />
+      <MachineStack.Screen name="MachineDetail" initialParams={props.route.params} component={MachineDetailScreen} />
+    </MachineStack.Navigator>
   );
 }
 
@@ -118,7 +121,7 @@ function TabNavigation() {
   };
   return (
     <Tab.Navigator
-      tabBarPosition="bottom"
+      tabBarPosition="none"
       tabBar={(props) => <TabBar {...props} />}
       tabBarOptions={{
         showLabel: false,
@@ -163,7 +166,7 @@ function Navigation(props) {
           <RootStack.Screen name="Back" component={TabNavigation} options={{ headerShown: false }} />
           <RootStack.Screen name="Payment" component={PaymentScreen} options={rootOptions} initialParams={props.route ? props.route.params : {}} />
           <RootStack.Screen name="Map" component={MachineStackScreen} options={{ headerShown: false }} />
-      <SettingsStack.Screen name="HelpStackScreen" component={HelpStackScreen}options={{ headerShown: false }}  />
+          <SettingsStack.Screen name="HelpStackScreen" component={HelpStackScreen}options={{ headerShown: false }}  />
         </RootStack.Navigator>
       ) : (
         <Stack.Navigator>

@@ -79,7 +79,7 @@ function LocationSearch({ machines, navigation, handlePlaceClick }) {
   return (
     <>
       <View style={inputActive ? styles.searchBarWrapperActive : styles.searchBarWrapper}>
-        <TextInput style={styles.input} placeholder="Search location" placeholderTextColor="#B1B1B1" returnKeyType="next" textContentType="location" value={location} onChangeText={(e) => searchLocation(e)} onFocus={() => setInputActive(true)} ref={(input) => (searchInput = input)} />
+        {/*<TextInput style={styles.input} placeholder="Search location" placeholderTextColor="#B1B1B1" returnKeyType="next" textContentType="location" value={location} onChangeText={(e) => searchLocation(e)} onFocus={() => setInputActive(true)} ref={(input) => (searchInput = input)} />*/}
         <CloseBtn>
           <TouchableOpacity onPress={() => (inputActive ? leaveInput() : navigation.goBack())}>
             <Image style={styles.headerImage} source={require('../../assets/images/back.png')} />

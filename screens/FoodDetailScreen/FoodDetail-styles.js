@@ -104,7 +104,7 @@ export const styles = StyleSheet.create({
     flexDirection: "column",
     alignSelf: 'flex-end',
     marginLeft: 'auto',
-
+    marginTop: -10
   },
   price:{
     color: "#ffffff",
@@ -115,7 +115,7 @@ export const styles = StyleSheet.create({
     fontFamily: "TitilliumBold"
   },
   getPromo: {
-    backgroundColor: "#018260",
+    backgroundColor: "#1F504C",
     height: 55,
     borderRadius: 17,
     alignSelf: "center",
@@ -130,22 +130,49 @@ export const styles = StyleSheet.create({
     height: 50,
     borderRadius: 17,
     alignSelf: "center",
-    width: '100%',
     marginTop:10,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom:60
+    marginBottom:10, marginRight: 10,
+    flex: 5
   },
   toCartText: {
-    fontSize: 16,
+    textAlign: 'center',
+    fontSize: 24,
     color: "#ffffff",
     fontFamily: "TitilliumBold",
     marginHorizontal: 20,
   },
+  editCart: {
+    backgroundColor: "#ACC63C",
+    height: 35,
+    width: 35,
+    borderRadius: 9,
+    alignSelf: "center",
+    marginTop:10,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom:10,
+  },
+  cartAmount: {
+    width: 60,
+    backgroundColor: "#1A514D",
+    height: 60,
+    borderRadius: 9,
+    alignSelf: "center",
+    marginTop:10,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom:10,
+    marginLeft: 15,
+    marginRight: 15
+  },
   promo: {
     width: 105,
-    backgroundColor: "#018260",
+    backgroundColor: "#1F504C",
     borderRadius:17,
     justifyContent: "center",
     alignItems: "center",
@@ -153,24 +180,24 @@ export const styles = StyleSheet.create({
     marginTop:10,
     color: "#ffffff",
     textAlign: "left",
-    paddingHorizontal: 10,
+    paddingHorizontal: 20,
     fontFamily: "TitilliumBold",
     height: 55,
   },
   button: {
     backgroundColor: "#ACC63C",
-    height: 70,
+    height: 55,
     borderRadius: 17,
     alignSelf: "center",
     width: '100%',
-    marginTop:10,
+    marginTop:20,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
     marginBottom:10
   },
   buttonText: {
-    fontSize: 16,
+    fontSize: 17,
     color: "#ffffff",
     fontFamily: "TitilliumBold",
     marginHorizontal: 20,
@@ -188,17 +215,19 @@ export const styles = StyleSheet.create({
   cartlogo: {
     backgroundColor: '#FFFFFF', 
     borderRadius: 10000, 
-    width: 50,
-    height: 50,
-    paddingVertical: 13,
-    paddingHorizontal: 15,
-    marginLeft: 'auto'
+    width: 60,
+    height: 60,
+    paddingVertical: 14,
+    paddingHorizontal: 12,
+    marginLeft: 'auto',
+    borderColor: '#ACBF5C',
+    borderWidth: 6
   },
   cartvalue : {
     position: 'absolute',
-    bottom: 0,
-    left: 5,
-    backgroundColor: '#ACC63C',
+    bottom: -6,
+    left: -6,
+    backgroundColor: '#CB0606',
     width: 20,
     height: 20,
     zIndex: 999999, 
@@ -212,7 +241,23 @@ export const styles = StyleSheet.create({
     fontWeight: "normal",
     fontFamily: "TitilliumBold",
   },
+  bannerWrapper : {
+    width: "100%",
+    position: "relative"
+  },
 
+  bannerImage: {
+    width: "100%",
+    height: 300,
+    backgroundColor:"#006443",
+  },
+  arcImage: {
+    width: "100%",
+    height: 60,
+    position: "absolute",
+    bottom: 0,
+    zIndex: 9000
+  },
 
 });
 
@@ -228,7 +273,7 @@ export const CloseBtn = styled.View`
 `;
 
 export const Price = styled.Text`
-  font-size: 18px;
+  font-size: 32px;
   color: #fff;
   padding-left: 5px;
   text-align: left;

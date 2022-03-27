@@ -25,8 +25,11 @@ function NotificationsScreen({ navigation, company }) {
 
   return (
     <ScrollHeaderContainer backButton={"Home"} navigation={navigation} title="Notifications">
-      <StatusBar style="light"  hidden={true} />
+      <StatusBar style="light"  hidden={false} />
       <View style={[globalStyles.e_layout, { marginTop: 20 }]}>
+        <View style={[globalStyles.e_layout, { marginTop: 80, marginBottom: 10}]}>
+          <Text style={globalStyles.h1}>Notifications</Text>
+        </View>
         {notify &&
           notify.map((item, idx) => (
             <View key={idx} style={{ flexDirection: "row", justifyContent: "flex-start", width: 100+"%", backgroundColor: "#124C47", borderRadius: 7, paddingHorizontal: 15, paddingVertical: 15, marginBottom: 10 }}>

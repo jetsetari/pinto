@@ -44,33 +44,36 @@ function HelpScreen({ navigation, company, ...props }) {
 
 
   return (
-    <ScrollHeaderContainer title={showQuestions === false ? "Help" : showQuestions[1]} backButton={() => showQuestions === false ? setShowQuestions(false) : {}} navigation={navigation}>
-      <StatusBar hidden={false} style="light" />
-      <Content>
-        {showQuestions === false ? (
-          <View style={globalStyles.e_layout_container}>
-            <View style={globalStyles.e_layout}>
-              {tags &&
-                tags.map((tag, idx) => (
-                  <TouchableOpacity
-                    key={idx}
-                    style={styles.accountlistitemFirst}
-                    onPress={() => {
-                      setShowQuestions([true, tag]);
-                    }}
-                  >
-                    <View style={(globalStyles.e_layout, globalStyles.accountlistitem_content)}>
-                      <Text style={globalStyles.mainButtonText}>{tag}</Text>
-                      <Ionicons name="arrow-forward" size={22} color={"#ffffff"} />
-                    </View>
-                  </TouchableOpacity>
-                ))}
-            </View>
-          </View>
-        ):(
-          <TagScreen tag={showQuestions[1]} navigation={navigation} questions={questions} />
-        )}
-      </Content>
+     <ScrollHeaderContainer backButton={"Home"} navigation={navigation} title="Notifications">
+      <StatusBar style="light"  hidden={false} />
+      <View style={[globalStyles.e_layout, { marginTop: 20 }]}>
+        <View style={[globalStyles.e_layout, { marginTop: 80, marginBottom: 0}]}>
+          <Text style={globalStyles.h1}>Help</Text>
+        </View>
+        <View style={{ width: '100%' }}>
+          {showQuestions === false ? (
+            <>
+                {tags &&
+                  tags.map((tag, idx) => (
+                    <TouchableOpacity
+                      key={idx}
+                      style={styles.accountlistitemFirst}
+                      onPress={() => {
+                        setShowQuestions([true, tag]);
+                      }}
+                    >
+                      <View style={(globalStyles.e_layout, globalStyles.accountlistitem_content)}>
+                        <Text style={globalStyles.mainButtonText}>{tag}</Text>
+                        <Ionicons name="arrow-forward" size={22} color={"#ffffff"} />
+                      </View>
+                    </TouchableOpacity>
+                  ))}
+            </>
+          ):(
+            <TagScreen tag={showQuestions[1]} navigation={navigation} questions={questions} />
+          )}
+        </View>
+      </View>
     </ScrollHeaderContainer>
   );
 }

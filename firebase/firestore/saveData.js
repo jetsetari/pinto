@@ -400,6 +400,36 @@ export function addUserToCompany(company_id, client_id, data, callback) {
     })
 }
 
+export function removeOldProducts(company_id, client_id, product_id, callback) {
+  var productsQuery = db.collection("companies").doc(company_id)
+                        .collection("clients").doc(client_id)
+                        .collection('cart').where('id','==',product_id);
+  productsQuery.get().then(function(querySnapshot) {
+    if(querySnapshot.length > 0){
+      querySnapshot.forEach(function(doc) {
+        doc.ref.delete();
+        callback();
+      });
+    } else {
+      callback();
+    }
+    
+  });
+}
+
+export function addMultipleProducts(company_id, client_id, products, callback){
+    let batch = db.batch();
+    console.log(company_id, client_id, products);
+    products.forEach((doc) => {
+      batch.set(db.collection("companies").doc(company_id).collection("clients").doc(client_id).collection('cart').doc(), doc);
+    });
+    // Commit the batch
+    batch.commit().then(function () {
+        callback()
+    });
+}
+
+
 export function addProductToCart(company_id, client_id, data, date, callback) {
   db.collection("companies")
     .doc(company_id)

@@ -9,6 +9,8 @@ import { Ionicons } from "@expo/vector-icons";
 import SwitchToggle from "react-native-switch-toggle";
 import { setSelectedCompany } from "../../redux/actions/selectedCompany-actions";
 import DropDownPicker from "react-native-dropdown-picker";
+import { StatusBar } from "expo-status-bar";
+
 
 //Redux
 import { connect } from "react-redux";
@@ -111,6 +113,10 @@ function CompanyScreen({ navigation, setSelectedCompany, company }) {
 
   return (
     <ScrollHeaderContainer title="Account mode">
+      <StatusBar hidden={false} style="light" />
+      <View style={[globalStyles.e_layout, { marginTop: 80}]}>
+        <Text style={globalStyles.h1}>Account mode</Text>
+      </View>
       <TouchableOpacity style={globalStyles.accountlistitem}>
         <View style={(globalStyles.e_layout, globalStyles.accountlistitem_content)}>
           <Text style={globalStyles.mainButtonText}>Individual mode</Text>

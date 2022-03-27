@@ -22,7 +22,7 @@ export const styles = StyleSheet.create({
   modalPromoImage : {width: '100%', height: '100%', resizeMode: 'cover', position: 'absolute', zIndex: 88},
 
   cart: {  
-    top: 230, 
+    top: 220, 
     right: 30, 
     zIndex: 999999, 
     position: 'absolute', 
@@ -33,17 +33,19 @@ export const styles = StyleSheet.create({
   cartlogo: {
     backgroundColor: '#FFFFFF', 
     borderRadius: 10000, 
-    width: 50,
-    height: 50,
-    paddingVertical: 13,
-    paddingHorizontal: 15,
-    marginLeft: 'auto'
+    width: 60,
+    height: 60,
+    paddingVertical: 14,
+    paddingHorizontal: 12,
+    marginLeft: 'auto',
+    borderColor: '#ACBF5C',
+    borderWidth: 6
   },
   cartvalue : {
     position: 'absolute',
-    bottom: 0,
-    left: 5,
-    backgroundColor: '#ACC63C',
+    bottom: -6,
+    left: -6,
+    backgroundColor: '#CB0606',
     width: 20,
     height: 20,
     zIndex: 999999, 
@@ -56,6 +58,25 @@ export const styles = StyleSheet.create({
     fontSize:14,
     fontWeight: "normal",
     fontFamily: "TitilliumBold",
+  },
+
+  button: {
+    backgroundColor: "#ACC63C",
+    height: 55,
+    borderRadius: 17,
+    alignSelf: "center",
+    width: '100%',
+    marginTop:20,
+    flexDirection: "row",
+    justifyContent: "center",
+    alignItems: "center",
+    marginBottom:10
+  },
+  buttonText: {
+    fontSize: 17,
+    color: "#ffffff",
+    fontFamily: "TitilliumBold",
+    marginHorizontal: 20,
   },
 
   activeTabStyle: {

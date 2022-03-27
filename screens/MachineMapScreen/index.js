@@ -34,7 +34,8 @@ function MachineMap(props) {
   const [state, setState] = useState(initialState);
   const [active, setActive] = useState(0);
   const [machines, setMachines] = useState([]); 
- 
+  const [activeMarker, setActiveMarker] = useState(false);
+
   const _map = useRef(null);
   const _scrollView = useRef(null);
 
@@ -63,7 +64,7 @@ function MachineMap(props) {
         if (mapIndex !== index) {
           mapIndex = index;
           const { location } = machines[index];
-          let coordinate = { latitude: location.lat, longitude: location.lng };
+          let coordinate = { latitude: parseFloat(location.lat), longitude: parseFloat(location.lng) };
           _map.current.animateToRegion(
             {
               ...coordinate,
@@ -74,6 +75,8 @@ function MachineMap(props) {
           );
         }
       }, 10);
+
+
     });
   });
 
@@ -125,13 +128,29 @@ function MachineMap(props) {
     _scrollView.current.scrollTo({ x: x, y: 0, animated: false });
   };
 
-
-
   return (
     <Container>
       <MapView provider={PROVIDER_GOOGLE} ref={_map} style={styles.map} initialRegion={state.region}>
+        {machines.map((machine, index) => (
+          <Marker
+            key={index}
+            coordinate={{ latitude: parseFloat(machine.location.lat), longitude: parseFloat(machine.location.lng) }}
+            title={machine.name}
+            onPress={ (e) => { 
+              if(activeMarker == machine.id){ 
+                props.route.params.dish !== undefined ? (
+                  props.navigation.navigate("MachineDetail", {machine, dish: props.route.params.dish})
+                ):(
+                  props.navigation.navigate("MachineDetail", {machine, dishes: props.route.params.dishes})
+                )
+              } else { 
+                setActiveMarker(machine.id) 
+              } 
+            }}
+            description={machine.location.region}
+          />
+        ))}
         {machines.map((machine, index) => {
-          
           const scaleStyle = {
             transform: [
               {
