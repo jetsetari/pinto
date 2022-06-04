@@ -5,9 +5,9 @@
     "slug": "pinto",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./src/assets/images/launch/icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./src/assets/images/launch/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#123835"
     },
@@ -22,7 +22,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./src/assets/images/launch/adaptive-icon.png",
         "backgroundColor": "#123835"
       },
       "package": "com.pintoapp.pinto"
@@ -32,7 +32,7 @@
       "translucent": true
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./src/assets/images/launch/favicon.png"
     },
     "description": ""
   }
